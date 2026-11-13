@@ -423,13 +423,17 @@ def render(script, workdir, music_file):
 
     # 3) real footage (AI image only as fallback)
     log(f"Collecting footage for {len(plan)} shots ...")
-    used, shots, n_video = set(), [], 0
+    used, shots, n_video, last_ok = set(), [], 0, None
     for i, (sc, d) in enumerate(plan, 1):
         length = d + (T if i < len(plan) else 0.5)
         try:
             kind, src = studio.get_visual(sc, f, portrait, length, used, workdir, i)
+            last_ok = (kind, src)
         except Exception as e:  # noqa
-            raise StepError(f"shot {i}: {e}")
+            if not last_ok:
+                raise StepError(f"shot {i}: {e}")
+            log(f"  shot {i}: no new visual ({e}); reusing the previous one with a new move")
+            kind, src = last_ok
         n_video += kind == "video"
         shots.append(studio.build_shot(kind, src, length, i, workdir, f))
         if i % 5 == 0:

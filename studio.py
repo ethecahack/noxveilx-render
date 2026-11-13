@@ -259,17 +259,30 @@ def pixabay_clip(query, portrait, min_dur, used, dst):
     return None
 
 
-def ai_image(prompt, dst, w, h, tries=4):
+_last_poll = [0.0]
+POLL_GAP = float(os.environ.get("POLLINATIONS_GAP", "18"))  # anonymous tier allows ~1 request per 15s
+
+
+def ai_image(prompt, dst, w, h, tries=5):
     base = (prompt or "dark cinematic mysterious landscape")[:300]
-    base += (", single cinematic frame, photorealistic, no text, no watermark, "
-             "no women, no girls, no female figures")
+    base += ", single cinematic frame, photorealistic, no text, no watermark, no women, no girls"
     q = urllib.parse.quote(base)
     for attempt in range(1, tries + 1):
+        wait = POLL_GAP - (time.time() - _last_poll[0])
+        if wait > 0:
+            time.sleep(wait)
+        _last_poll[0] = time.time()
         seed = random.randint(1, 999999)
         url = (f"https://image.pollinations.ai/prompt/{q}?width={w}&height={h}"
                f"&nologo=true&private=true&referrer=noxveilx&model=flux&seed={seed}")
         try:
-            data = _get_bytes(url, timeout=180)
+            r = requests.get(url, headers=UA, timeout=180)
+            if r.status_code in (402, 429, 503):
+                _log(f"  image attempt {attempt}: busy ({r.status_code}), waiting")
+                time.sleep(20 * attempt)
+                continue
+            r.raise_for_status()
+            data = r.content
             if len(data) < 5000:
                 raise StudioError("bad image")
             if shows_female([data]) is True:
