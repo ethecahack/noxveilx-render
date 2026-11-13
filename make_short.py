@@ -564,7 +564,11 @@ def run_worker(no_upload):
                 continue
             try:
                 log(f"===== {lang} / {fmt} =====")
-                script = fetch_next(cfg, lang, fmt)
+                sample = HERE / "samples" / f"{fmt}.json"
+                if os.environ.get("DRY_RUN") == "1" and sample.exists():
+                    script = json.loads(sample.read_text(encoding="utf-8"))  # dry run: don't touch the queue
+                else:
+                    script = fetch_next(cfg, lang, fmt)
                 if not script:
                     log("لا يوجد سيناريو جاهز لهذه الصيغة الآن.")
                     continue
