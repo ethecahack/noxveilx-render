@@ -50,7 +50,7 @@ def load_config():
         # وضع السحابة (GitHub Actions): الإعدادات من متغيرات البيئة
         return {
             "n8n_base_url": os.environ.get("N8N_BASE_URL", "https://farizk16.app.n8n.cloud"),
-            "token": os.environ["NOXVEIL_TOKEN"],
+            "token": os.environ["NOXVEIL_TOKEN"].strip(),
             "langs": [x for x in os.environ.get("LANGS", "en").split(",") if x],
             "formats": [x for x in os.environ.get("FORMATS", "short,long").split(",") if x],
         }
