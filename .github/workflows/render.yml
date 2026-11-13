@@ -4,6 +4,9 @@ on:
   schedule:
     # 11:00 UTC = 2:00 PM Riyadh (after the short script at 1 PM and the long script at 12:30)
     - cron: "0 11 * * *"
+  push:
+    # committing a change to this file starts a run right away
+    paths: [".github/run-now"]
   workflow_dispatch:
     inputs:
       formats:
