@@ -23,6 +23,8 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+
+import studio
 from datetime import datetime
 from pathlib import Path
 
@@ -30,7 +32,7 @@ HERE = Path(__file__).resolve().parent
 
 # ------------------------- الإعدادات -------------------------
 
-VOICES = {"en": "en-US-GuyNeural", "ar": "ar-SA-HamedNeural"}
+VOICES = {"en": os.environ.get("VOICE_EN", "en-US-ChristopherNeural"), "ar": "ar-SA-HamedNeural"}
 FONT = os.environ.get("CAPTION_FONT", "Arial")
 
 FORMATS = {
@@ -372,7 +374,7 @@ def get_sections(script, fmt):
         if len(sections) < 3:
             raise StepError("الفيديو الطويل يحتاج 3 فصول على الأقل.")
         return sections, data.get("thumbnail_prompt", ""), data.get("thumbnail_text", "")
-    scenes = [s for s in (data if isinstance(data, list) else []) if s.get("image_prompt")][:7]
+    scenes = [s for s in (data if isinstance(data, list) else []) if s.get("image_prompt")][:10]
     if len(scenes) < 3:
         raise StepError("السيناريو يحتوي مشاهد أقل من 3.")
     return [{"heading": "", "narration": script["narration"], "scenes": scenes}], "", ""
@@ -382,10 +384,12 @@ def render(script, workdir, music_file):
     fmt = script.get("format", "short")
     f = FORMATS[fmt]
     lang = script["lang"]
+    portrait = fmt == "short"
+    T = 0.4  # transition length
     sections, thumb_prompt, thumb_text = get_sections(script, fmt)
 
-    # 1) الصوت لكل فصل -> توقيتات دقيقة للفصول والكابشن والمشاهد
-    log(f"توليد التعليق الصوتي ({len(sections)} جزء) ...")
+    # 1) voice per section -> exact timings for chapters, captions and shots
+    log(f"Voice-over ({len(sections)} part(s)) ...")
     offsets, durs, all_words, wavs = [], [], [], []
     t = 0.0
     for i, sec in enumerate(sections, 1):
@@ -405,58 +409,78 @@ def render(script, workdir, music_file):
     (workdir / "audio_list.txt").write_text("".join(f"file '{w}'\n" for w in wavs), encoding="utf-8")
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", "audio_list.txt",
          "-c:a", "pcm_s16le", "audio.wav"], cwd=workdir)
-    log(f"مدة الصوت: {audio_dur:.1f} ثانية")
+    log(f"Audio length: {audio_dur:.1f}s")
 
-    # 2) الصور
-    plan = []  # (prompt, duration)
+    # 2) shot plan
+    plan, section_starts = [], set()
     for i, sec in enumerate(sections):
         n = len(sec["scenes"])
-        per = durs[i] / n
-        for s in sec["scenes"]:
-            plan.append((s["image_prompt"], per))
-    plan[-1] = (plan[-1][0], plan[-1][1] + 0.5)
-    log(f"جلب {len(plan)} صورة ...")
-    images = []
-    for i, (prompt, _) in enumerate(plan, 1):
-        images.append(fetch_image(prompt, workdir / f"img_{i:03d}.jpg", f["w"], f["h"]))
-        if i % 5 == 0:
-            log(f"  ... {i}/{len(plan)}")
+        if i > 0:
+            section_starts.add(len(plan))
+        for sc in sec["scenes"]:
+            plan.append((sc, durs[i] / n))
+    base = [d for _, d in plan]
 
-    # 3) الكابشن
-    log("بناء الكابشن ...")
-    build_ass(all_words, fmt, workdir / "captions.ass")
-
-    # 4) المشاهد
-    log("بناء المشاهد (قد يأخذ وقتًا للفيديو الطويل) ...")
-    clips = []
-    for i, (img, (_, dur)) in enumerate(zip(images, plan), 1):
-        clips.append(build_scene(img, dur, i, workdir, fmt))
-        if fmt == "long" and i % 5 == 0:
-            log(f"  ... مشهد {i}/{len(plan)}")
-
-    log("التجميع النهائي ...")
-    final = assemble(clips, audio_dur, workdir, music_file, fmt)
-    log(f"الفيديو جاهز: {final} ({final.stat().st_size / 1048576:.1f}MB)")
-
-    extra = {"thumbnail": None, "description": script.get("description", "")}
-    if fmt == "long":
-        chapters = "\n".join(f"{fmt_ts(o)} {s.get('heading') or 'Part ' + str(i + 1)}"
-                             for i, (o, s) in enumerate(zip(offsets, sections)))
-        extra["description"] = (script.get("description", "").strip()
-                                + "\n\nChapters:\n" + chapters)
-        (workdir / "chapters.txt").write_text(chapters, encoding="utf-8")
-        log("الفصول:\n" + chapters)
+    # 3) real footage (AI image only as fallback)
+    log(f"Collecting footage for {len(plan)} shots ...")
+    used, shots, n_video = set(), [], 0
+    for i, (sc, d) in enumerate(plan, 1):
+        length = d + (T if i < len(plan) else 0.5)
         try:
-            log("صنع الصورة المصغّرة ...")
-            extra["thumbnail"] = make_thumbnail(thumb_prompt or plan[0][0], thumb_text, workdir)
-            log(f"الصورة المصغّرة جاهزة: {extra['thumbnail']}")
+            kind, src = studio.get_visual(sc, f, portrait, length, used, workdir, i)
         except Exception as e:  # noqa
-            log(f"تعذّرت الصورة المصغّرة (سيُنشر بدونها): {e}")
+            raise StepError(f"shot {i}: {e}")
+        n_video += kind == "video"
+        shots.append(studio.build_shot(kind, src, length, i, workdir, f))
+        if i % 5 == 0:
+            log(f"  ... {i}/{len(plan)} shots ({n_video} real clips)")
+    log(f"Shots ready: {n_video} real video clips, {len(plan) - n_video} AI images")
+
+    # 4) edit: transitions, captions, sound design
+    log("Editing (transitions, captions, sound) ...")
+    video, cuts = studio.join_with_transitions(shots, base, workdir, f, section_starts, T)
+    hook = script.get("title", "") if fmt == "short" else ""
+    chapters = [(o, s.get("heading", "")) for o, s in zip(offsets, sections)][1:] if fmt == "long" else []
+    font = os.environ.get("CAPTION_FONT", FONT)
+    studio.build_captions(all_words, fmt, f, workdir / "captions.ass", font, hook, chapters)
+    sfx = studio.build_sfx(audio_dur, cuts, workdir / "sfx.wav", seed=int(script.get("id", 1)))
+    music = music_file if music_file and Path(music_file).exists() else studio.pick_music(HERE, audio_dur, workdir)
+    final = studio.final_mix(video, workdir / "audio.wav", music, sfx, workdir / "captions.ass",
+                             audio_dur, workdir, f)
+    size_mb = final.stat().st_size / (1024 * 1024)
+    if size_mb > f["max_mb"]:
+        kbps = max(int((f["max_mb"] * 0.9 * 8 * 1024) / max(audio_dur, 1) - 160), 400)
+        log(f"{size_mb:.1f}MB is large, re-encoding at {kbps}k ...")
+        run(["ffmpeg", "-y", "-i", "final.mp4", "-c:v", "libx264", "-preset", "veryfast",
+             "-b:v", f"{kbps}k", "-maxrate", f"{kbps}k", "-bufsize", f"{kbps * 2}k",
+             "-c:a", "copy", "-movflags", "+faststart", "final_small.mp4"], cwd=workdir)
+        (workdir / "final_small.mp4").replace(final)
+    log(f"Video ready: {final} ({final.stat().st_size / 1048576:.1f}MB)")
+
+    desc = script.get("description", "")
+    desc = desc.replace("Visuals are AI-generated illustrations. Facts checked against public sources.",
+                        "Footage: licensed stock clips and AI-generated illustrations. Facts checked against public sources.")
+    extra = {"thumbnail": None, "description": desc}
+    if fmt == "long":
+        chapters_txt = "\n".join(f"{fmt_ts(o)} {s.get('heading') or 'Part ' + str(i + 1)}"
+                                  for i, (o, s) in enumerate(zip(offsets, sections)))
+        extra["description"] = desc.strip() + "\n\nChapters:\n" + chapters_txt
+        (workdir / "chapters.txt").write_text(chapters_txt, encoding="utf-8")
+        log("Chapters:\n" + chapters_txt)
+        try:
+            log("Thumbnail ...")
+            first_q = (plan[0][0].get("stock_query") or "") if plan else ""
+            extra["thumbnail"] = studio.make_thumbnail(thumb_prompt or plan[0][0].get("image_prompt", ""),
+                                                       thumb_text, first_q, workdir,
+                                                       os.environ.get("THUMB_FONT") or bold_font_path())
+            log(f"Thumbnail ready: {extra['thumbnail']}")
+        except Exception as e:  # noqa
+            log(f"Thumbnail failed (publishing without it): {e}")
     return final, extra
 
 
 def cleanup(workdir):
-    keep = ("final.mp4", "script.json", "thumbnail.jpg", "chapters.txt")
+    keep = ("final.mp4", "script.json", "thumbnail.jpg", "chapters.txt")  # noqa
     for p in workdir.iterdir():
         if p.name not in keep:
             try:
@@ -575,10 +599,11 @@ def main():
 
     (HERE / "logs").mkdir(exist_ok=True)
     LOG_FILE = HERE / "logs" / "worker.log"
+    studio.set_logger(log)
     check_tools()
     if not args.n8n:
         die("شغّل السكربت مع --n8n (أو استخدم run_daily.bat / test_render.bat)")
-    run_worker(args.no_upload)
+    run_worker(args.no_upload or os.environ.get("DRY_RUN") == "1")
 
 
 if __name__ == "__main__":

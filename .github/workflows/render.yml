@@ -5,13 +5,17 @@ on:
     # 11:00 UTC = 2:00 PM Riyadh (after the short script at 1 PM and the long script at 12:30)
     - cron: "0 11 * * *"
   push:
-    # committing a change to this file starts a run right away
+    # committing a change to .github/run-now starts a run right away.
+    # if that file contains the word "dry", the video is rendered but NOT published (kept as an artifact).
     paths: [".github/run-now"]
   workflow_dispatch:
     inputs:
       formats:
         description: "short,long | short | long"
         default: "short,long"
+      dry_run:
+        description: "1 = render only, do not publish"
+        default: "0"
 
 concurrency:
   group: noxveilx-render
@@ -20,7 +24,7 @@ concurrency:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 170
     steps:
       - uses: actions/checkout@v4
 
@@ -28,6 +32,10 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg fonts-liberation fonts-dejavu-core > /dev/null
+          mkdir -p ~/.fonts
+          curl -fsSL -o ~/.fonts/Anton-Regular.ttf https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf || true
+          fc-cache -f > /dev/null
+          if fc-list | grep -qi anton; then echo "CAPTION_FONT=Anton" >> $GITHUB_ENV; echo "THUMB_FONT=$HOME/.fonts/Anton-Regular.ttf" >> $GITHUB_ENV; else echo "CAPTION_FONT=Liberation Sans" >> $GITHUB_ENV; fi
 
       - uses: actions/setup-python@v5
         with:
@@ -36,13 +44,27 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements.txt
 
+      - name: Decide mode
+        run: |
+          DRY="${{ github.event.inputs.dry_run || '0' }}"
+          if [ "${{ github.event_name }}" = "push" ] && grep -qi dry .github/run-now; then DRY=1; fi
+          FORMATS="${{ github.event.inputs.formats || 'short,long' }}"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            if grep -qi "long-only" .github/run-now; then FORMATS=long; fi
+            if grep -qi "short-only" .github/run-now; then FORMATS=short; fi
+          fi
+          echo "DRY_RUN=$DRY" >> $GITHUB_ENV
+          echo "FORMATS=$FORMATS" >> $GITHUB_ENV
+          echo "dry=$DRY formats=$FORMATS"
+
       - name: Render and publish
         env:
           NOXVEIL_TOKEN: ${{ secrets.NOXVEIL_TOKEN }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           N8N_BASE_URL: https://farizk16.app.n8n.cloud
           LANGS: en
-          FORMATS: ${{ github.event.inputs.formats || 'short,long' }}
-          CAPTION_FONT: Liberation Sans
           PYTHONUNBUFFERED: "1"
         run: python make_short.py --n8n
 
@@ -53,3 +75,13 @@ jobs:
           name: worker-log-${{ github.run_id }}
           path: logs/worker.log
           retention-days: 14
+
+      - name: Keep dry-run video
+        if: always() && env.DRY_RUN == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-${{ github.run_id }}
+          path: |
+            output/**/final.mp4
+            output/**/thumbnail.jpg
+          retention-days: 7
