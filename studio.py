@@ -451,7 +451,7 @@ def build_captions(words, fmt, fmt_cfg, out_path, font, hook_text="", chapters=(
     """words: [(start, end, word)]. chapters: [(start_sec, heading)]."""
     w, h = fmt_cfg["w"], fmt_cfg["h"]
     per = 3 if fmt == "short" else 6
-    size = 112 if fmt == "short" else 66
+    size = 112 if fmt == "short" else 80
     margin_v = int(h * 0.30) if fmt == "short" else 70
     chunks, cur = [], []
     for wd in words:
@@ -665,6 +665,7 @@ def make_thumbnail(prompt, text, query, workdir, bold_font=None, W=1280, H=720):
         if not stock_photo(query, base):
             raise
     im = Image.open(base).convert("RGB")
+    im = im.crop((0, 0, im.width, int(im.height * 0.92)))  # drop the generator's corner watermark
     # cover-crop
     r = max(W / im.width, H / im.height)
     im = im.resize((int(im.width * r) + 1, int(im.height * r) + 1), Image.LANCZOS)
@@ -694,26 +695,32 @@ def make_thumbnail(prompt, text, query, workdir, bold_font=None, W=1280, H=720):
         lines = [" ".join(words[:len(words) // 2]), " ".join(words[len(words) // 2:])]
     else:
         lines = [" ".join(words)] if words else []
-    y = H * 0.20
+    y = H * 0.18
     colors = [(255, 255, 255), (255, 212, 0)]
     for i, line in enumerate(lines):
-        size = 150
+        size = 160
         f = _font(size, bold_font)
-        while d.textlength(line, font=f) > W * 0.58 and size > 60:
+        while d.textlength(line, font=f) > W * 0.60 and size > 60:
             size -= 6
             f = _font(size, bold_font)
-        d.text((60, y), line, font=f, fill=colors[i % 2] if len(lines) > 1 else colors[1],
+        top_off = d.textbbox((0, 0), line, font=f, stroke_width=10)[1]
+        d.text((60, y - top_off), line, font=f, fill=colors[i % 2] if len(lines) > 1 else colors[1],
                stroke_width=10, stroke_fill=(0, 0, 0))
-        y += size * 1.08
-    # red accent bar + arrow pointing at the subject
-    d.rectangle([60, y + 14, 60 + 220, y + 34], fill=(230, 20, 30))
-    ax, ay = int(W * 0.50), int(min(y + 120, H * 0.80))
+        box = d.textbbox((60, y - top_off), line, font=f, stroke_width=10)
+        y = box[3] + 14
+    # red accent bar under the text + arrow pointing at the subject
+    d.rectangle([60, y + 6, 60 + 220, y + 24], fill=(230, 20, 30))
+    ax, ay = int(W * 0.50), int(min(y + 110, H * 0.82))
     d.polygon([(ax, ay - 46), (ax + 120, ay), (ax, ay + 46)], fill=(230, 20, 30), outline=(0, 0, 0))
     d.rectangle([ax - 110, ay - 16, ax, ay + 16], fill=(230, 20, 30))
-    # brand tag
+    # brand tag sized to its text
     tag_font = _font(34, bold_font)
-    d.rounded_rectangle([W - 250, H - 78, W - 30, H - 26], radius=10, fill=(0, 0, 0))
-    d.text((W - 232, H - 74), "NOXVEILX", font=tag_font, fill=(255, 212, 0))
+    tw = d.textlength("NOXVEILX", font=tag_font)
+    tb = d.textbbox((0, 0), "NOXVEILX", font=tag_font)
+    th = tb[3] - tb[1]
+    x0, y0 = W - 30 - tw - 36, H - 30 - th - 24
+    d.rounded_rectangle([x0, y0, W - 30, H - 30], radius=10, fill=(0, 0, 0))
+    d.text((x0 + 18, y0 + 12 - tb[1]), "NOXVEILX", font=tag_font, fill=(255, 212, 0))
     out = workdir / "thumbnail.jpg"
     im.save(out, "JPEG", quality=92)
     return out
