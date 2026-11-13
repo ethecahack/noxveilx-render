@@ -412,7 +412,7 @@ def build_captions(words, fmt, fmt_cfg, out_path, font, hook_text="", chapters=(
     """words: [(start, end, word)]. chapters: [(start_sec, heading)]."""
     w, h = fmt_cfg["w"], fmt_cfg["h"]
     per = 3 if fmt == "short" else 6
-    size = 92 if fmt == "short" else 60
+    size = 112 if fmt == "short" else 66
     margin_v = int(h * 0.30) if fmt == "short" else 70
     chunks, cur = [], []
     for wd in words:
