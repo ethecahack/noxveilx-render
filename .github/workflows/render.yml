@@ -1,0 +1,52 @@
+name: NoxveilX - render & publish
+
+on:
+  schedule:
+    # 11:00 UTC = 2:00 PM Riyadh (after the short script at 1 PM and the long script at 12:30)
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+    inputs:
+      formats:
+        description: "short,long | short | long"
+        default: "short,long"
+
+concurrency:
+  group: noxveilx-render
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ffmpeg and fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-liberation fonts-dejavu-core > /dev/null
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      - name: Render and publish
+        env:
+          NOXVEIL_TOKEN: ${{ secrets.NOXVEIL_TOKEN }}
+          N8N_BASE_URL: https://farizk16.app.n8n.cloud
+          LANGS: en
+          FORMATS: ${{ github.event.inputs.formats || 'short,long' }}
+          CAPTION_FONT: Liberation Sans
+          PYTHONUNBUFFERED: "1"
+        run: python make_short.py --n8n
+
+      - name: Keep log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker-log-${{ github.run_id }}
+          path: logs/worker.log
+          retention-days: 14
