@@ -91,44 +91,78 @@ def _img_b64(data, max_side=512):
 
 
 _last_gemini = [0.0]
+_MODELS = [m for m in [os.environ.get("GEMINI_VISION_MODEL", ""), "gemini-flash-lite-latest", "gemini-flash-latest",
+                       "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"] if m]
+_model_ok = [None]
 
 
-def shows_female(images):
-    """True = a woman/girl is visible, False = none, None = could not check."""
-    if not GEMINI_KEY or not images:
+def _gemini(parts):
+    """Returns the model's text answer, or None if no model is reachable."""
+    if not GEMINI_KEY:
         return None
-    parts = [{"text": "Look at these frames from one video clip. Does ANY frame show a woman or a girl "
-                      "(face, body, partial body, clearly female silhouette, statue, painting, drawing or "
-                      "mannequin of a female)? Answer with exactly one word: YES or NO."}]
-    for data in images[:4]:
-        parts.append({"inline_data": {"mime_type": "image/jpeg", "data": _img_b64(data)}})
-    url = (f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
-           f"?key={GEMINI_KEY}")
     body = {"contents": [{"parts": parts}],
-            "generationConfig": {"temperature": 0, "maxOutputTokens": 5,
-                                 "thinkingConfig": {"thinkingBudget": 0}}}
-    for attempt in range(4):
-        wait = 4.2 - (time.time() - _last_gemini[0])  # stay under the free-tier rate limit
-        if wait > 0:
-            time.sleep(wait)
-        _last_gemini[0] = time.time()
-        try:
-            r = requests.post(url, json=body, timeout=40)
+            "generationConfig": {"temperature": 0, "maxOutputTokens": 30}}
+    models = [_model_ok[0]] if _model_ok[0] else list(_MODELS)
+    for model in models:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_KEY}"
+        for attempt in range(4):
+            wait = 4.2 - (time.time() - _last_gemini[0])  # stay under the free-tier rate limit
+            if wait > 0:
+                time.sleep(wait)
+            _last_gemini[0] = time.time()
+            try:
+                r = requests.post(url, json=body, timeout=40)
+            except Exception:  # noqa
+                time.sleep(5)
+                continue
+            if r.status_code == 404 or r.status_code == 400:
+                break  # try the next model name
             if r.status_code == 429 or r.status_code >= 500:
                 time.sleep(10 * (attempt + 1))
                 continue
             if r.status_code != 200:
-                _log(f"  vision check unavailable ({r.status_code})")
+                _log(f"  vision check unavailable ({r.status_code}): {r.text[:120]}")
                 return None
-            txt = json.dumps(r.json().get("candidates", [{}])[0].get("content", {})).upper()
-            if "YES" in txt:
-                return True
-            if "NO" in txt:
-                return False
-            return None
-        except Exception:  # noqa
-            time.sleep(5)
+            _model_ok[0] = model
+            cand = r.json().get("candidates", [{}])[0]
+            return " ".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []))
+    if not _model_ok[0]:
+        _log("  vision check unavailable (no Gemini model reachable)")
     return None
+
+
+def check_frames(images, query="", allow_men=False):
+    """Returns (ok, reason). ok=None when the check could not run."""
+    if not GEMINI_KEY or not images:
+        return None, "no check"
+    q = (query or "").strip()
+    parts = [{"text": (
+        "These are frames from ONE stock video clip. Answer three questions about ALL frames together.\n"
+        "FEMALE: does any frame show a woman or a girl (face, body, partial body, clearly female silhouette, "
+        "or a statue/painting/drawing of a female)?\n"
+        "PEOPLE: does any frame show any person at all?\n"
+        f"MATCH: does the clip clearly show '{q}'?\n"
+        "Reply in exactly this format: FEMALE=YES|NO PEOPLE=YES|NO MATCH=YES|NO")}]
+    for data in images[:4]:
+        parts.append({"inline_data": {"mime_type": "image/jpeg", "data": _img_b64(data)}})
+    ans = _gemini(parts)
+    if ans is None:
+        return None, "no check"
+    a = ans.upper().replace(" ", "")
+    if "FEMALE=YES" in a:
+        return False, "woman visible"
+    if "PEOPLE=YES" in a and not allow_men:
+        return False, "people visible"
+    if q and "MATCH=NO" in a:
+        return False, "does not match"
+    return True, "ok"
+
+
+def shows_female(images):
+    ok, reason = check_frames(images)
+    if ok is None:
+        return None
+    return reason == "woman visible"
 
 
 def _get_bytes(url, timeout=30):
@@ -190,7 +224,10 @@ def pexels_clip(query, portrait, min_dur, used, dst):
         return None
     random.shuffle(videos)
     videos.sort(key=lambda v: 0 if (v.get("duration") or 0) >= min_dur else 1)
+    checked = 0
     for v in videos:
+        if checked >= 8:
+            break
         vid = f"pexels-{v.get('id')}"
         if vid in used:
             continue
@@ -206,9 +243,10 @@ def pexels_clip(query, portrait, min_dur, used, dst):
             frames = [_get_bytes(u) for u in sample[:4]]
         except Exception:  # noqa
             frames = []
-        verdict = shows_female(frames)
-        if verdict is True:
-            _log("  skipped a clip (woman visible)")
+        checked += 1
+        ok, why = check_frames(frames, query, allow_men=bool(re.search(r"\bman\b|\bmen\b", query, re.I)))
+        if ok is False:
+            _log(f"  skipped a clip ({why})")
             continue
         try:
             _download(f["link"], dst)
@@ -247,8 +285,9 @@ def pixabay_clip(query, portrait, min_dur, used, dst):
             frames = [_get_bytes(u) for u in thumbs[:2]]
         except Exception:  # noqa
             frames = []
-        if shows_female(frames) is True:
-            _log("  skipped a clip (woman visible)")
+        ok, why = check_frames(frames, query, allow_men=bool(re.search(r"\bman\b|\bmen\b", query, re.I)))
+        if ok is False:
+            _log(f"  skipped a clip ({why})")
             continue
         try:
             _download(pick["url"], dst)
