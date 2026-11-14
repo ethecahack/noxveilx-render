@@ -498,7 +498,16 @@ def cleanup(workdir):
 def fetch_next(cfg, lang, fmt):
     import requests
     url = cfg["n8n_base_url"].rstrip("/") + "/webhook/noxveil-next"
-    r = requests.get(url, params={"lang": lang, "format": fmt, "token": cfg["token"]}, timeout=90)
+    r = None
+    for attempt in range(1, 5):
+        try:
+            r = requests.get(url, params={"lang": lang, "format": fmt, "token": cfg["token"]}, timeout=90)
+            if r.status_code < 500:
+                break
+        except Exception as e:  # noqa
+            if attempt == 4:
+                raise StepError(f"تعذّر الوصول إلى n8n: {e}")
+        time.sleep(20 * attempt)
     if r.status_code == 404:
         return None
     if r.status_code != 200:
@@ -579,7 +588,14 @@ def run_worker(no_upload):
                 workdir.mkdir(parents=True, exist_ok=True)
                 (workdir / "script.json").write_text(
                     json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
-                final, extra = render(script, workdir, music)
+                try:
+                    final, extra = render(script, workdir, music)
+                except Exception as e1:  # noqa  (temporary network / TTS hiccups: try once more)
+                    log(f"المحاولة الأولى فشلت ({e1})، إعادة المحاولة بعد دقيقة ...")
+                    time.sleep(60)
+                    workdir = outroot / fmt / f"{script['id']}-{datetime.now().strftime('%Y%m%d-%H%M%S')}-r2"
+                    workdir.mkdir(parents=True, exist_ok=True)
+                    final, extra = render(script, workdir, music)
                 if no_upload:
                     log("وضع الاختبار: لم يتم الرفع. شاهد الفيديو من المسار أعلاه.")
                     try:

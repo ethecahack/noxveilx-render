@@ -103,6 +103,7 @@ jobs:
         if: always() && env.DRY_RUN == '1'
         run: |
           set -e
+          if [ -z "$(find output -name final.mp4 2>/dev/null)" ]; then echo "nothing rendered"; exit 0; fi
           mkdir -p /tmp/prev
           for v in $(find output -name final.mp4); do
             n=$(basename $(dirname $v)); d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 $v)
