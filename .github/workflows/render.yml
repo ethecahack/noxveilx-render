@@ -3,7 +3,7 @@ name: NoxveilX - render & publish
 on:
   schedule:
     # 11:00 UTC = 2:00 PM Riyadh (after the short script at 1 PM and the long script at 12:30)
-    - cron: "0 11 * * *"
+    - cron: "37 10 * * *"   # 1:37 PM Riyadh; GitHub often starts scheduled runs late, so this lands around 2 PM
   push:
     # committing a change to .github/run-now starts a run right away.
     # if that file contains the word "dry", the video is rendered but NOT published (kept as an artifact).
@@ -23,6 +23,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   render:
@@ -48,6 +49,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Decide mode
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           DRY="${{ github.event.inputs.dry_run || '0' }}"
           if [ "${{ github.event_name }}" = "push" ] && grep -qi dry .github/run-now; then DRY=1; fi
@@ -56,11 +59,18 @@ jobs:
             if grep -qi "long-only" .github/run-now; then FORMATS=long; fi
             if grep -qi "short-only" .github/run-now; then FORMATS=short; fi
           fi
+          SKIP=0
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            N=$(gh api "repos/${{ github.repository }}/actions/runs?event=push&created=>=$(date -u +%F)" --jq '[.workflow_runs[] | select(.head_commit.message | test("Publish now"))] | length' || echo 0)
+            if [ "$N" != "0" ]; then SKIP=1; echo "Already published manually today, skipping."; fi
+          fi
+          echo "SKIP=$SKIP" >> $GITHUB_ENV
           echo "DRY_RUN=$DRY" >> $GITHUB_ENV
           echo "FORMATS=$FORMATS" >> $GITHUB_ENV
           echo "dry=$DRY formats=$FORMATS"
 
       - name: Render and publish
+        if: env.SKIP != '1'
         env:
           NOXVEIL_TOKEN: ${{ secrets.NOXVEIL_TOKEN }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
