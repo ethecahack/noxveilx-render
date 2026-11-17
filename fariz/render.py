@@ -113,7 +113,7 @@ def scene_clip(bg_img: Path, frame_png: Path, cap_png: Path, secs: float, k: int
     ]
     zp = moves[k % len(moves)]
     vf = (f"[0:v]scale=2160:3840:force_original_aspect_ratio=increase,crop=2160:3840,"
-          f"zoompan={zp}:d={frames}:s=1080x1920:fps={FPS},eq=saturation=0.85:contrast=1.04,"
+          f"zoompan={zp}:d={frames}:s=1080x1920:fps={FPS},eq=saturation=0.42:brightness=-0.16:contrast=1.12,colorbalance=rs=.14:gs=.05:bs=-.14:rm=.09:bm=-.09,vignette=PI/4,"
           f"fade=t=in:st=0:d=0.35[bg];"
           f"[bg][1:v]overlay=0:0[a];[2:v]fade=t=in:st=0.15:d=0.3:alpha=1[c];[a][c]overlay=0:0,format=yuv420p[v]")
     run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", str(bg_img), "-loop", "1", "-i", str(frame_png),
