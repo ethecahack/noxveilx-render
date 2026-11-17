@@ -1,0 +1,8 @@
+POST 003 [static] سوريا على الخريطة: جغرافيا صنعت التاريخ
+  gemini image unavailable, using photos: HTTP Error 429: Too Many Requests {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/do
+  bg: pexels-11255523 (parchment texture)
+  slide 1/1 -> slide_01.jpg
+jobs: 1
