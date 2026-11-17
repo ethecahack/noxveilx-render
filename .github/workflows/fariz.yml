@@ -37,6 +37,7 @@ jobs:
           if [ "${{ github.event_name }}" = "push" ]; then
             POSTS=$(grep -oP 'posts=\K[0-9,\-]+' fariz/run-now || true)
             grep -q 'publish=1' fariz/run-now && PUBLISH=1 || PUBLISH=0
+            [ -z "$POSTS" ] && SKIP=1
           fi
           if [ "${{ github.event_name }}" = "schedule" ] && [ "$AUTO" != "1" ]; then
             SKIP=1; echo "Auto-publishing is off (fariz/settings.json publish=false until the pilot is approved)."
