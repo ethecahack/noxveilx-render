@@ -11,7 +11,6 @@ FARIZ KANAAN — محرك الإنتاج.
   python fariz/render.py fariz/content/POST_005.json [--out fariz/out]
 """
 import argparse
-import asyncio
 import json
 import os
 import subprocess
@@ -59,9 +58,16 @@ def render_slides(post, R, out: Path, cache: Path):
     slides = post.get("slides", [])
     n = len(slides)
     files = []
+    got = []
     for i, sl in enumerate(slides, 1):
         seed = post["post_number"] * 100 + i
         bg = bg_for(sl.get("bg"), 1080, 1080, cache, seed)
+        if not bg and sl.get("bg"):
+            bg = bg_for(sl["bg"].split(",")[0] + ", dark antique scene", 1080, 1080, cache, seed + 50)
+        if bg:
+            got.append(bg)
+        elif got:
+            bg = got[-1]
         idx = f"{i:02d} / {n:02d}" if n > 1 else ""
         html = D.square_slide(sl, bg, idx=idx, swipe=(n > 1 and i < n))
         f = out / f"slide_{i:02d}.jpg"
@@ -73,25 +79,26 @@ def render_slides(post, R, out: Path, cache: Path):
 
 # ---------------- الريل ----------------
 
-async def _tts(text, mp3):
-    import edge_tts
-    await edge_tts.Communicate(text, VOICE, rate="-4%").save(str(mp3))
-
-
 def tts(text, mp3: Path):
     if os.environ.get("FK_NO_NET") == "1":
         # معاينة بدون إنترنت: صمت بطول تقديري
         secs = max(2.5, len(text.split()) / 2.3)
         run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono", "-t", f"{secs:.2f}", "-q:a", "4", str(mp3)])
         return
-    for attempt in range(4):
-        try:
-            asyncio.run(_tts(text, mp3))
-            if mp3.exists() and mp3.stat().st_size > 2000:
-                return
-        except Exception as e:  # noqa
-            log(f"  tts attempt {attempt + 1} failed: {e}")
-    raise RuntimeError("TTS failed")
+    txt = mp3.with_suffix(".txt")
+    txt.write_text(text, encoding="utf-8")
+    last = ""
+    for attempt in range(6):
+        voice = VOICE if attempt < 4 else "ar-EG-ShakirNeural"
+        r = subprocess.run([sys.executable, "-m", "edge_tts", "--voice", voice, "--rate=-4%", "--file", str(txt),
+                            "--write-media", str(mp3)], capture_output=True, text=True)
+        if mp3.exists() and mp3.stat().st_size > 2000:
+            return
+        last = (r.stderr or r.stdout)[-600:]
+        log(f"  tts attempt {attempt + 1} failed ({voice}): {last}")
+        import time as _t
+        _t.sleep(4 + attempt * 4)
+    raise RuntimeError("TTS failed: " + last[-300:])
 
 
 def scene_clip(bg_img: Path, frame_png: Path, cap_png: Path, secs: float, k: int, out: Path):
@@ -150,6 +157,8 @@ def render_reel(post, R, out: Path, cache: Path):
         tts(sc["voice"], mp3)
         secs = duration(mp3) + 0.45
         bg = bg_for(sc.get("bg"), 1080, 1920, cache, n * 100 + 10 + k)
+        if not bg and cbg:
+            bg = cbg
         if not bg:
             fb = fb or fallback_bg_jpg(R, 1080, 1920, tmp / "fallback.jpg")
             bg = fb

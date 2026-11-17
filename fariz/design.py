@@ -95,7 +95,7 @@ def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None) -
     seed = seed if seed is not None else int(hashlib.md5(prompt.encode()).hexdigest()[:6], 16)
     full = f"{prompt}, {BG_STYLE}"
     url = ("https://image.pollinations.ai/prompt/" + urllib.parse.quote(full) +
-           f"?width={w}&height={h}&nologo=true&model=flux&seed={seed}")
+           f"?width={w}&height={h + 140}&nologo=true&model=flux&seed={seed}")
     for attempt in range(3):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "fariz-kanaan-studio/1.0"})
@@ -112,7 +112,8 @@ def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None) -
 
 def bg_css(bg: Path) -> str:
     if bg and bg.exists():
-        return f"background:{INK} url('{img_uri(bg)}') center/cover no-repeat;"
+        # الصورة أطول من الإطار: نثبّتها من الأعلى فيُقصّ الشريط السفلي (علامة المولّد)
+        return f"background:{INK} url('{img_uri(bg)}') center top/cover no-repeat;filter:sepia(.32) saturate(.92) contrast(1.03);"
     # احتياطي: تدرّج دافئ داكن
     return (f"background: radial-gradient(ellipse at 18% 40%, #3a2a1a 0%, transparent 45%),"
             f"radial-gradient(ellipse at 85% 55%, #33261a 0%, transparent 42%),"

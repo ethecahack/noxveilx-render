@@ -59,7 +59,9 @@ jobs:
           FARIZ_TOKEN: ${{ secrets.NOXVEIL_TOKEN }}
           N8N_BASE_URL: https://farizk16.app.n8n.cloud
           PYTHONUNBUFFERED: "1"
-        run: python fariz/pipeline.py fetch
+        run: |
+          mkdir -p fariz/out
+          python fariz/pipeline.py fetch 2>&1 | tee fariz/out/design_log.txt
 
       - name: Upload media to fariz-media branch
         if: env.SKIP != '1'
@@ -76,6 +78,7 @@ jobs:
           cd /tmp/media
           for d in $GITHUB_WORKSPACE/fariz/out/POST_*; do rm -rf "$(basename $d)"; cp -r "$d" .; done
           cp $GITHUB_WORKSPACE/fariz/out/jobs.json "jobs_${{ github.run_id }}.json"
+          mkdir -p logs && cp $GITHUB_WORKSPACE/fariz/out/design_log.txt "logs/design_${{ github.run_id }}.txt" || true
           git add -A && git commit -qm "media ${{ github.run_id }}" && git push -q origin fariz-media
           echo "MEDIA_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
