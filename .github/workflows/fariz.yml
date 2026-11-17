@@ -1,0 +1,87 @@
+name: FARIZ KANAAN - design & publish
+
+on:
+  schedule:
+    - cron: "23 17 * * *"   # 8:23 PM Riyadh — design then publish around 9 PM
+  push:
+    paths: ["fariz/run-now"]   # edit this file to run now (e.g. "posts=3-10" for a preview batch)
+  workflow_dispatch:
+    inputs:
+      posts:
+        description: "post numbers from repo files, e.g. 3-10 (empty = next from n8n)"
+        default: ""
+      publish:
+        description: "1 = publish to Instagram"
+        default: "0"
+
+concurrency:
+  group: fariz-kanaan
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide mode
+        run: |
+          POSTS="${{ github.event.inputs.posts || '' }}"
+          PUBLISH="${{ github.event.inputs.publish || vars.FARIZ_PUBLISH || '0' }}"
+          SKIP=0
+          if [ "${{ github.event_name }}" = "push" ]; then
+            POSTS=$(grep -oP 'posts=\K[0-9,\-]+' fariz/run-now || true)
+            grep -q 'publish=1' fariz/run-now && PUBLISH=1 || PUBLISH=0
+          fi
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ vars.FARIZ_PUBLISH }}" != "1" ]; then
+            SKIP=1; echo "Auto-publishing is off (set repo variable FARIZ_PUBLISH=1 after approval)."
+          fi
+          echo "FARIZ_POSTS=$POSTS" >> $GITHUB_ENV
+          echo "FARIZ_PUBLISH=$PUBLISH" >> $GITHUB_ENV
+          echo "SKIP=$SKIP" >> $GITHUB_ENV
+          echo "posts=$POSTS publish=$PUBLISH skip=$SKIP"
+
+      - name: Install tools
+        if: env.SKIP != '1'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
+          pip install -q edge-tts requests playwright
+          python -m playwright install --with-deps chromium > /dev/null
+
+      - name: Design
+        if: env.SKIP != '1'
+        env:
+          FARIZ_TOKEN: ${{ secrets.NOXVEIL_TOKEN }}
+          N8N_BASE_URL: https://farizk16.app.n8n.cloud
+          PYTHONUNBUFFERED: "1"
+        run: python fariz/pipeline.py fetch
+
+      - name: Upload media to fariz-media branch
+        if: env.SKIP != '1'
+        run: |
+          set -e
+          ls fariz/out/POST_* -d 2>/dev/null || { echo "nothing designed"; echo "NO_MEDIA=1" >> $GITHUB_ENV; exit 0; }
+          git config user.name "fariz-bot"; git config user.email "bot@fariz.local"
+          if git ls-remote --exit-code origin fariz-media > /dev/null; then
+            git fetch -q origin fariz-media
+            git worktree add -q -B fariz-media /tmp/media FETCH_HEAD
+          else
+            git worktree add -q --orphan -b fariz-media /tmp/media
+          fi
+          cd /tmp/media
+          for d in $GITHUB_WORKSPACE/fariz/out/POST_*; do rm -rf "$(basename $d)"; cp -r "$d" .; done
+          cp $GITHUB_WORKSPACE/fariz/out/jobs.json "jobs_${{ github.run_id }}.json"
+          git add -A && git commit -qm "media ${{ github.run_id }}" && git push -q origin fariz-media
+          echo "MEDIA_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Hand over to n8n
+        if: env.SKIP != '1' && env.NO_MEDIA != '1'
+        env:
+          FARIZ_TOKEN: ${{ secrets.NOXVEIL_TOKEN }}
+          N8N_BASE_URL: https://farizk16.app.n8n.cloud
+          PYTHONUNBUFFERED: "1"
+        run: python fariz/pipeline.py notify "$MEDIA_SHA"

@@ -1,0 +1,49 @@
+{
+ "post_number": 10,
+ "type": "static",
+ "lang": "ar",
+ "phase": "syria",
+ "title": "الجامع الأموي: طبقات من التاريخ في مكان واحد",
+ "topic": "الجامع الأموي بدمشق",
+ "slides": [
+  {
+   "layout": "list",
+   "headline": "الجامع الأموي",
+   "headline_gold": "طبقات من التاريخ في مكان واحد",
+   "rows": [
+    {
+     "k": "آرامي",
+     "v": "معبد للإله حدد"
+    },
+    {
+     "k": "روماني",
+     "v": "معبد جوبيتر الدمشقي"
+    },
+    {
+     "k": "بيزنطي",
+     "v": "كنيسة القديس يوحنا المعمدان"
+    },
+    {
+     "k": "705 م",
+     "v": "الوليد بن عبد الملك يبدأ بناء الجامع",
+     "note": "واكتمل البناء نحو عام 715 م"
+    }
+   ],
+   "note": "وما يزال يضم مقامًا يُنسب إلى النبي يحيى عليه السلام.",
+   "bg": "grand courtyard of an ancient mosque with arches and golden mosaics at dusk, minaret on the left"
+  }
+ ],
+ "caption": "مكانٌ واحد… وأربع طبقات من التاريخ.\nمعبدٌ آرامي، ثم معبد روماني لجوبيتر، ثم كنيسة بيزنطية، ثم الجامع الذي شيّده الخليفة الوليد بن عبد الملك بين عامي 705 و715م، ليصبح من أشهر معالم دمشق والعالم الإسلامي.\n\n💬 أيّ معلم سوري تريد أن نقرأ طبقاته في منشور قادم؟",
+ "hashtags": "#الجامع_الأموي #دمشق #الدولة_الأموية #تاريخ_سوريا #عمارة_إسلامية #UmayyadMosque #Damascus #IslamicArchitecture #FarizKanaan",
+ "sources": [
+  {
+   "title": "Encyclopaedia Britannica — Great Mosque of Damascus",
+   "url": "https://www.britannica.com/topic/Great-Mosque-of-Damascus"
+  },
+  {
+   "title": "UNESCO World Heritage Centre — Ancient City of Damascus",
+   "url": "https://whc.unesco.org/en/list/20"
+  }
+ ],
+ "status": "APPROVED"
+}

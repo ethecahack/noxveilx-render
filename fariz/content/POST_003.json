@@ -1,0 +1,63 @@
+{
+ "post_number": 3,
+ "type": "static",
+ "lang": "ar",
+ "phase": "syria",
+ "title": "سوريا على الخريطة: جغرافيا صنعت التاريخ",
+ "topic": "الجغرافيا السورية",
+ "slides": [
+  {
+   "layout": "points",
+   "headline": "سوريا على الخريطة",
+   "headline_gold": "جغرافيا صنعت التاريخ",
+   "sub": "بين البحر والبادية… أرضٌ كانت دائمًا ممرًّا للحضارات.",
+   "label": "سوريا في أرقام:",
+   "points": [
+    {
+     "icon": "map",
+     "title": "185,180 كم²",
+     "text": "المساحة الإجمالية لسوريا."
+    },
+    {
+     "icon": "waves",
+     "title": "193 كم",
+     "text": "طول الساحل على البحر المتوسط."
+    },
+    {
+     "icon": "mountain",
+     "title": "2814 م",
+     "text": "ارتفاع جبل الشيخ (حرمون)، أعلى قمة."
+    },
+    {
+     "icon": "route",
+     "title": "5 دول",
+     "text": "تشترك سوريا معها بحدود برية."
+    },
+    {
+     "icon": "droplets",
+     "title": "الفرات",
+     "text": "أطول أنهارها؛ يدخلها من تركيا ويمضي إلى العراق."
+    },
+    {
+     "icon": "compass",
+     "title": "ملتقى الطرق",
+     "text": "على مفترق طرق قديمة بين آسيا وأوروبا وأفريقيا."
+    }
+   ],
+   "bg": "old parchment map of the Levant with a brass compass and an hourglass on a dark wooden desk, ancient columns in the far left"
+  }
+ ],
+ "caption": "لماذا كانت سوريا ممرًّا لكل الحضارات تقريبًا؟\nالجواب يبدأ من الخريطة: ساحلٌ على المتوسط، وجبالٌ تحرس الغرب، وبادية تفتح الطريق شرقًا، ونهر الفرات يربطها بعمق بلاد الرافدين.\nهذه الجغرافيا هي المسرح الذي سنقرأ عليه تاريخ سوريا في هذه السلسلة.\n\n📌 احفظ المنشور وتابع السلسلة.",
+ "hashtags": "#سوريا #جغرافيا_سوريا #تاريخ_سوريا #الفرات #بلاد_الشام #Syria #Geography #History #FarizKanaan",
+ "sources": [
+  {
+   "title": "CIA World Factbook — Syria (Geography)",
+   "url": "https://www.cia.gov/the-world-factbook/countries/syria/"
+  },
+  {
+   "title": "Encyclopaedia Britannica — Syria: Land",
+   "url": "https://www.britannica.com/place/Syria/Land"
+  }
+ ],
+ "status": "APPROVED"
+}

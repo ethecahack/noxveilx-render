@@ -1,0 +1,93 @@
+{
+ "post_number": 5,
+ "type": "reel",
+ "lang": "ar",
+ "phase": "syria",
+ "title": "أوغاريت: أبجدية من 30 حرفًا",
+ "topic": "أوغاريت والأبجدية الأوغاريتية",
+ "reel": {
+  "cover": {
+   "headline": "أوغاريت",
+   "headline_gold": "أبجدية من 30 حرفًا",
+   "sub": "مدينة على الساحل السوري كتبت الأصوات بالحروف.",
+   "label": "شاهد القصة",
+   "bg": "ruins of an ancient Canaanite port city on the Mediterranean coast at golden hour, stone walls"
+  },
+  "scenes": [
+   {
+    "voice": "عام ألفٍ وتسعمئةٍ وثمانيةٍ وعشرين، كان فلّاحٌ يحرث أرضه قرب اللاذقية… فانفتح تحت محراثه قبرٌ قديم.",
+    "caption": "1928… محراثٌ يكشف مدينة",
+    "gold": [
+     "1928…"
+    ],
+    "bg": "old plough in a field near the sea at dusk revealing an ancient stone tomb entrance"
+   },
+   {
+    "voice": "قاد الاكتشاف إلى تلّ رأس شمرة، حيث كانت ترقد مدينة أوغاريت، الميناءُ الكنعانيُّ العريق.",
+    "caption": "رأس شمرة… هي أوغاريت",
+    "gold": [
+     "أوغاريت"
+    ],
+    "bg": "aerial view of ancient city ruins on a hill by the Mediterranean sea, warm light"
+   },
+   {
+    "voice": "بدأ عالم الآثار الفرنسي كلود شيفر التنقيب عام ألفٍ وتسعمئةٍ وتسعةٍ وعشرين، وعُثر على آلاف الألواح الطينية.",
+    "caption": "آلاف الألواح الطينية",
+    "gold": [
+     "آلاف"
+    ],
+    "bg": "archaeologist tools and many clay tablets on a wooden table in a dim tent, lantern light"
+   },
+   {
+    "voice": "لكنّ بعضها حمل كتابةً غريبة: علاماتٌ مسماريةٌ لا يتجاوز عددها ثلاثين علامة.",
+    "caption": "30 علامة فقط",
+    "gold": [
+     "30"
+    ],
+    "bg": "extreme close up of cuneiform wedge signs pressed into clay, dramatic side light"
+   },
+   {
+    "voice": "كلُّ علامةٍ تمثّل صوتًا واحدًا… إنها أبجدية، من أقدم الأبجديات المعروفة في العالم، تعود إلى نحو القرن الرابع عشر قبل الميلاد.",
+    "caption": "أبجدية… قبل نحو 3400 عام",
+    "gold": [
+     "أبجدية…"
+    ],
+    "bg": "ancient scribe's desk with a stylus and a small clay tablet, oil lamp, deep shadows"
+   },
+   {
+    "voice": "وقد فُكّت رموزها عام ألفٍ وتسعمئةٍ وثلاثين، بعد عامين فقط من الاكتشاف.",
+    "caption": "فُكّت رموزها عام 1930",
+    "gold": [
+     "1930"
+    ],
+    "bg": "vintage 1930s study with old notebooks, magnifying glass and papers with symbols, warm lamp"
+   },
+   {
+    "voice": "انتهت أوغاريت في القرن الثاني عشر قبل الميلاد، لكنّ حروفها بقيت شاهدًا على عبقرية هذه الأرض.",
+    "caption": "انتهت المدينة… وبقيت حروفها",
+    "gold": [
+     "حروفها"
+    ],
+    "bg": "ancient ruins at night under stars by the sea, a single stone tablet glowing in the foreground"
+   }
+  ],
+  "end_line": "من سوريا… تبدأ الحكاية."
+ },
+ "caption": "عام 1928 كشف محراث فلّاح قبرًا قديمًا قرب اللاذقية… وكانت البداية لاكتشاف أوغاريت.\nفي ألواحها ظهرت أبجدية مسمارية من 30 علامة، كل علامة فيها تمثّل صوتًا، وهي من أقدم الأبجديات المعروفة في العالم (نحو القرن الرابع عشر ق.م).\n\n🎬 شاهد القصة كاملة، واكتب لنا: ما المدينة السورية التي تريد أن نروي قصتها؟",
+ "hashtags": "#أوغاريت #رأس_شمرة #الأبجدية #تاريخ_سوريا #اللاذقية #Ugarit #Alphabet #AncientHistory #FarizKanaan",
+ "sources": [
+  {
+   "title": "Encyclopaedia Britannica — Ugarit",
+   "url": "https://www.britannica.com/place/Ugarit"
+  },
+  {
+   "title": "Encyclopaedia Britannica — Ugaritic alphabet",
+   "url": "https://www.britannica.com/topic/Ugaritic-alphabet"
+  },
+  {
+   "title": "Center for Online Judaic Studies — Ugaritic Alphabet Tablet",
+   "url": "https://cojs.org/ugaritic_alphabet_tablet-_14th-13th_century_bce/"
+  }
+ ],
+ "status": "APPROVED"
+}

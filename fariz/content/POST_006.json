@@ -1,0 +1,32 @@
+{
+ "post_number": 6,
+ "type": "static",
+ "lang": "ar",
+ "phase": "syria",
+ "title": "دمشق: مدينة لم تتوقف عن الحياة",
+ "topic": "دمشق القديمة",
+ "slides": [
+  {
+   "layout": "text",
+   "icon": "landmark",
+   "headline": "دمشق",
+   "headline_gold": "مدينة لم تتوقف عن الحياة",
+   "text": "تصفها اليونسكو بأنها **من أقدم مدن الشرق الأوسط**؛ تأسست في **الألفية الثالثة قبل الميلاد**، وكانت عاصمة الدولة الأموية، وأُدرجت مدينتها القديمة على قائمة التراث العالمي عام **1979**.",
+   "quote": "مدينةٌ يُقرأ تاريخها في حجارتها.",
+   "bg": "old Damascus street at night with ancient stone arches and lanterns, an old minaret silhouette on the left"
+  }
+ ],
+ "caption": "قليلة هي المدن التي ظلّت مأهولة كل هذا الزمن.\nدمشق، التي تصفها اليونسكو بأنها من أقدم مدن الشرق الأوسط، تأسست في الألفية الثالثة قبل الميلاد، وكانت عاصمة الدولة الأموية، وما زالت حاراتها القديمة تحمل طبقات من العصور.\n\n💬 ما أول ما يخطر في بالك حين تسمع اسم دمشق؟",
+ "hashtags": "#دمشق #الشام #دمشق_القديمة #تاريخ_سوريا #تراث_عالمي #Damascus #OldCity #History #FarizKanaan",
+ "sources": [
+  {
+   "title": "UNESCO World Heritage Centre — Ancient City of Damascus",
+   "url": "https://whc.unesco.org/en/list/20"
+  },
+  {
+   "title": "Encyclopaedia Britannica — Damascus",
+   "url": "https://www.britannica.com/place/Damascus"
+  }
+ ],
+ "status": "APPROVED"
+}
