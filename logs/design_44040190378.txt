@@ -1,0 +1,33 @@
+POST 003 [static] سوريا على الخريطة: جغرافيا صنعت التاريخ
+  slide 1/1 -> slide_01.jpg
+POST 004 [carousel] إيبلا: مملكة الألواح الطينية
+  slide 1/5 -> slide_01.jpg
+  slide 2/5 -> slide_02.jpg
+  slide 3/5 -> slide_03.jpg
+  slide 4/5 -> slide_04.jpg
+  slide 5/5 -> slide_05.jpg
+POST 005 [reel] أوغاريت: أبجدية من 30 حرفًا
+  cover.jpg
+  scene 1/7 (11.7s)
+  scene 2/7 (8.9s)
+  scene 3/7 (10.8s)
+  scene 4/7 (8.7s)
+  scene 5/7 (13.3s)
+  scene 6/7 (7.9s)
+  scene 7/7 (9.2s)
+  reel.mp4 (75.3s)
+POST 006 [static] دمشق: مدينة لم تتوقف عن الحياة
+  slide 1/1 -> slide_01.jpg
+POST 007 [carousel] تدمر: عروس الصحراء
+  slide 1/5 -> slide_01.jpg
+  slide 2/5 -> slide_02.jpg
+  slide 3/5 -> slide_03.jpg
+  slide 4/5 -> slide_04.jpg
+  slide 5/5 -> slide_05.jpg
+POST 008 [interactive] اختبر معلوماتك: التراث العالمي في سوريا
+  slide 1/1 -> slide_01.jpg
+POST 009 [static] قلعة الحصن: حارسة ممر حمص
+  slide 1/1 -> slide_01.jpg
+POST 010 [static] الجامع الأموي: طبقات من التاريخ في مكان واحد
+  slide 1/1 -> slide_01.jpg
+jobs: 8
