@@ -88,7 +88,38 @@ def esc(s) -> str:
 
 PEXELS_KEY = os.environ.get("PEXELS_API_KEY", "").strip()
 PIXABAY_KEY = os.environ.get("PIXABAY_API_KEY", "").strip()
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 _USED = set()
+_GEMINI_OFF = [False]
+
+
+def _gemini_image(prompt, w, h, out: Path):
+    """صورة مولّدة بـ Gemini (إن سمح الحساب)؛ تُعطَّل بقية التشغيل عند أول رفض."""
+    if not GEMINI_KEY or _GEMINI_OFF[0]:
+        return None
+    import json as _j
+    ratio = "1:1" if w == h else ("9:16" if h > w else "16:9")
+    body = {"contents": [{"parts": [{"text": f"{prompt}. {BG_STYLE}. Aspect ratio {ratio}."}]}],
+            "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": ratio}}}
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=" + GEMINI_KEY
+    try:
+        req = urllib.request.Request(url, data=_j.dumps(body).encode(), headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            d = _j.loads(r.read().decode())
+        for part in d["candidates"][0]["content"]["parts"]:
+            if "inlineData" in part:
+                out.write_bytes(base64.b64decode(part["inlineData"]["data"]))
+                print("  bg: gemini", flush=True)
+                return out
+    except Exception as e:  # noqa
+        msg = str(e)
+        try:
+            msg += " " + e.read().decode()[:200]  # noqa
+        except Exception:  # noqa
+            pass
+        print(f"  gemini image unavailable, using photos: {msg[:240]}", flush=True)
+        _GEMINI_OFF[0] = True
+    return None
 
 
 def _get_json(url, headers=None):
@@ -144,6 +175,7 @@ def _stock_photo(query, w, h, out: Path, seed):
     try:
         if _download(url, out):
             _USED.add(pid)
+            print(f"  bg: {pid} ({query})", flush=True)
             return out
     except Exception as e:  # noqa
         print(f"  stock download error: {e}", flush=True)
@@ -157,6 +189,8 @@ def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None, q
     if os.environ.get("FK_NO_NET") == "1":
         return None
     seed = seed if seed is not None else int(hashlib.md5(prompt.encode()).hexdigest()[:6], 16)
+    if prompt and _gemini_image(prompt, w, h, out):
+        return out
     for q in [query, query_from_prompt(prompt)]:
         if q:
             got = _stock_photo(q, w, h, out, seed)
@@ -180,7 +214,7 @@ def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None, q
 def bg_css(bg: Path) -> str:
     if bg and bg.exists():
         # الصورة أطول من الإطار: نثبّتها من الأعلى فيُقصّ الشريط السفلي (علامة المولّد)
-        return f"background:{INK} url('{img_uri(bg)}') center top/cover no-repeat;filter:sepia(.32) saturate(.92) contrast(1.03);"
+        return f"background:{INK} url('{img_uri(bg)}') center top/cover no-repeat;filter:brightness(.5) sepia(.5) saturate(.85) contrast(1.08) blur(.6px);transform:scale(1.02);"
     # احتياطي: تدرّج دافئ داكن
     return (f"background: radial-gradient(ellipse at 18% 40%, #3a2a1a 0%, transparent 45%),"
             f"radial-gradient(ellipse at 85% 55%, #33261a 0%, transparent 42%),"

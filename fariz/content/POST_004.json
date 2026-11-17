@@ -13,7 +13,7 @@
    "sub": "كيف غيّر أرشيفٌ عمره أكثر من 4000 عام فهمنا لتاريخ سوريا؟",
    "label": "كاروسيل | اسحب للقراءة",
    "bg": "ancient cuneiform clay tablets stacked on burnt wooden shelves in a ruined mudbrick palace, warm candlelight",
-   "q": "cuneiform clay tablet"
+   "q": "clay pottery dark"
   },
   {
    "layout": "text",
@@ -21,7 +21,7 @@
    "headline": "تلٌّ صامت في الشمال السوري",
    "text": "في **تل مرديخ** جنوب غرب حلب، بدأت بعثة إيطالية بقيادة **باولو ماتييه** التنقيب عام **1964**، وبعد أربع سنوات ثبت أن الموقع هو مدينة **إيبلا** القديمة.",
    "bg": "archaeological excavation trenches on an ancient tell at sunset, wooden tools, dusty ruins",
-   "q": "archaeological excavation"
+   "q": "archaeology excavation"
   },
   {
    "layout": "text",
@@ -30,7 +30,7 @@
    "stat_label": "عام العثور على الأرشيف الملكي",
    "text": "في القصر الملكي عُثر على آلاف النصوص المسمارية: نحو **1800 لوح كامل** و**4700 جزء** وآلاف الشظايا الصغيرة.",
    "bg": "close up of a cuneiform clay tablet under warm light, ancient palace room in shadows",
-   "q": "cuneiform tablet"
+   "q": "stone carving texture"
   },
   {
    "layout": "points",
@@ -58,7 +58,7 @@
     }
    ],
    "bg": "ancient royal archive room with clay tablets, smoke and embers, dramatic warm light",
-   "q": "ancient ruins palace"
+   "q": "ancient ruins dusk"
   },
   {
    "layout": "close",
@@ -67,7 +67,7 @@
    "quote": "أحيانًا تحفظ النارُ ما عجز الزمن عن حفظه.",
    "sub": "تابع السلسلة: محطات من تاريخ سوريا",
    "bg": "glowing embers over ancient ruins at night, old books and a quill on the right edge",
-   "q": "ancient ruins night"
+   "q": "embers dark"
   }
  ],
  "caption": "في عام 1975 خرج من تحت تراب تل مرديخ واحدٌ من أهم الأرشيفات في تاريخ الشرق القديم.\nألواح إيبلا (نحو 2400 ق.م) كشفت مملكة سورية منظّمة، تكتب وتدوّن وتتاجر، قبل آلاف السنين.\nوالمفارقة: الحريق الذي دمّر القصر هو نفسه الذي حفظ الألواح.\n\n↔️ اسحب لتقرأ القصة كاملة، وشاركها مع من يحب التاريخ.",
