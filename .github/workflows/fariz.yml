@@ -3,6 +3,8 @@ name: FARIZ KANAAN - design & publish
 on:
   schedule:
     - cron: "23 17 * * *"   # 8:23 PM Riyadh — design then publish around 9 PM
+    - cron: "47 18 * * *"   # backups: GitHub schedules can be late or skipped;
+    - cron: "17 20 * * *"   # n8n hands out only one post per 20 hours
   push:
     paths: ["fariz/run-now"]   # edit this file to run now (e.g. "posts=3-10" for a preview batch)
   workflow_dispatch:
