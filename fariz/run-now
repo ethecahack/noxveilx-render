@@ -1,2 +1,1 @@
-posts=4 publish=1
-# publish tonight's post (scheduled run was delayed)
+# idle — write posts=N (and publish=1) to run now
