@@ -1,0 +1,32 @@
+[
+ {
+  "row_id": 2,
+  "post_number": 4,
+  "type": "carousel",
+  "title": "إيبلا: مملكة الألواح الطينية",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg",
+   "slide_02.jpg",
+   "slide_03.jpg",
+   "slide_04.jpg",
+   "slide_05.jpg"
+  ],
+  "caption": "في عام 1975 خرج من تحت تراب تل مرديخ واحدٌ من أهم الأرشيفات في تاريخ الشرق القديم.\nألواح إيبلا (نحو 2400 ق.م) كشفت مملكة سورية منظّمة، تكتب وتدوّن وتتاجر، قبل آلاف السنين.\nوالمفارقة: الحريق الذي دمّر القصر هو نفسه الذي حفظ الألواح.\n\n↔️ اسحب لتقرأ القصة كاملة، وشاركها مع من يحب التاريخ.\n\n#إيبلا #تل_مرديخ #تاريخ_سوريا #حضارات_قديمة #الكتابة_المسمارية #Ebla #AncientSyria #Archaeology #FarizKanaan",
+  "sources": [
+   {
+    "title": "Encyclopaedia Britannica — Ebla",
+    "url": "https://www.britannica.com/place/Ebla"
+   },
+   {
+    "title": "IAA Mar Shiprim — The Archives of Ebla: A Primer",
+    "url": "https://iaassyriology.com/the-archives-of-ebla-a-primer/"
+   },
+   {
+    "title": "Wikipedia — Ebla tablets",
+    "url": "https://en.wikipedia.org/wiki/Ebla_tablets"
+   }
+  ],
+  "dir": "POST_004"
+ }
+]

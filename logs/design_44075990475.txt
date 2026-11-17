@@ -1,0 +1,16 @@
+POST 004 [carousel] إيبلا: مملكة الألواح الطينية
+  gemini image unavailable, using photos: HTTP Error 429: Too Many Requests {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/do
+  bg: pexels-34144282 (clay pottery dark)
+  slide 1/5 -> slide_01.jpg
+  bg: pexels-33852042 (archaeology excavation)
+  slide 2/5 -> slide_02.jpg
+  bg: pexels-27951793 (stone carving texture)
+  slide 3/5 -> slide_03.jpg
+  bg: pexels-7627660 (ancient ruins dusk)
+  slide 4/5 -> slide_04.jpg
+  bg: pexels-8863347 (embers dark)
+  slide 5/5 -> slide_05.jpg
+jobs: 1
