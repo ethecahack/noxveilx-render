@@ -81,7 +81,15 @@ def cmd_fetch():
     jobs = []
     local_posts = parse_posts(os.environ.get("FARIZ_POSTS", ""))
     items = []
-    if local_posts:
+    if local_posts and os.environ.get("FARIZ_PUBLISH", "0") == "1":
+        # نشر منشورات محددة فعليًا: نأخذ سجلها من n8n حتى يُسجَّل النشر عليه
+        for n in local_posts:
+            it = fetch_next(post=n)
+            if it and it.get("found") == "yes" and int(it["post_number"]) == n:
+                items.append(it)
+            else:
+                log(f"المنشور {n} غير جاهز في n8n (ربما نُشر من قبل) — تم تخطيه")
+    elif local_posts:
         items = [{"row_id": None, "post_number": n, "content": ""} for n in local_posts]
     else:
         count = int(os.environ.get("FARIZ_COUNT", "1"))
