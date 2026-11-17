@@ -11,7 +11,8 @@
    "headline_gold": "أبجدية من 30 حرفًا",
    "sub": "مدينة على الساحل السوري كتبت الأصوات بالحروف.",
    "label": "شاهد القصة",
-   "bg": "ruins of an ancient Canaanite port city on the Mediterranean coast at golden hour, stone walls"
+   "bg": "ruins of an ancient Canaanite port city on the Mediterranean coast at golden hour, stone walls",
+   "q": "ancient ruins coast"
   },
   "scenes": [
    {
@@ -20,7 +21,8 @@
     "gold": [
      "1928…"
     ],
-    "bg": "old plough in a field near the sea at dusk revealing an ancient stone tomb entrance"
+    "bg": "old plough in a field near the sea at dusk revealing an ancient stone tomb entrance",
+    "q": "plowed field"
    },
    {
     "voice": "قاد الاكتشاف إلى تلّ رأس شمرة، حيث كانت ترقد مدينة أوغاريت، الميناءُ الكنعانيُّ العريق.",
@@ -28,7 +30,8 @@
     "gold": [
      "أوغاريت"
     ],
-    "bg": "aerial view of ancient city ruins on a hill by the Mediterranean sea, warm light"
+    "bg": "aerial view of ancient city ruins on a hill by the Mediterranean sea, warm light",
+    "q": "ancient ruins aerial"
    },
    {
     "voice": "بدأ عالم الآثار الفرنسي كلود شيفر التنقيب عام ألفٍ وتسعمئةٍ وتسعةٍ وعشرين، وعُثر على آلاف الألواح الطينية.",
@@ -36,7 +39,8 @@
     "gold": [
      "آلاف"
     ],
-    "bg": "archaeologist tools and many clay tablets on a wooden table in a dim tent, lantern light"
+    "bg": "archaeologist tools and many clay tablets on a wooden table in a dim tent, lantern light",
+    "q": "archaeology tools"
    },
    {
     "voice": "لكنّ بعضها حمل كتابةً غريبة: علاماتٌ مسماريةٌ لا يتجاوز عددها ثلاثين علامة.",
@@ -44,7 +48,8 @@
     "gold": [
      "30"
     ],
-    "bg": "extreme close up of cuneiform wedge signs pressed into clay, dramatic side light"
+    "bg": "extreme close up of cuneiform wedge signs pressed into clay, dramatic side light",
+    "q": "cuneiform"
    },
    {
     "voice": "كلُّ علامةٍ تمثّل صوتًا واحدًا… إنها أبجدية، من أقدم الأبجديات المعروفة في العالم، تعود إلى نحو القرن الرابع عشر قبل الميلاد.",
@@ -52,7 +57,8 @@
     "gold": [
      "أبجدية…"
     ],
-    "bg": "ancient scribe's desk with a stylus and a small clay tablet, oil lamp, deep shadows"
+    "bg": "ancient scribe's desk with a stylus and a small clay tablet, oil lamp, deep shadows",
+    "q": "ancient writing clay"
    },
    {
     "voice": "وقد فُكّت رموزها عام ألفٍ وتسعمئةٍ وثلاثين، بعد عامين فقط من الاكتشاف.",
@@ -60,7 +66,8 @@
     "gold": [
      "1930"
     ],
-    "bg": "vintage 1930s study with old notebooks, magnifying glass and papers with symbols, warm lamp"
+    "bg": "vintage 1930s study with old notebooks, magnifying glass and papers with symbols, warm lamp",
+    "q": "old notebook magnifying glass"
    },
    {
     "voice": "انتهت أوغاريت في القرن الثاني عشر قبل الميلاد، لكنّ حروفها بقيت شاهدًا على عبقرية هذه الأرض.",
@@ -68,7 +75,8 @@
     "gold": [
      "حروفها"
     ],
-    "bg": "ancient ruins at night under stars by the sea, a single stone tablet glowing in the foreground"
+    "bg": "ancient ruins at night under stars by the sea, a single stone tablet glowing in the foreground",
+    "q": "ruins night stars"
    }
   ],
   "end_line": "من سوريا… تبدأ الحكاية."

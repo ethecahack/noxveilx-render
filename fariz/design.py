@@ -86,27 +86,94 @@ def esc(s) -> str:
 
 # ---------------- الخلفيات ----------------
 
-def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None) -> Path:
-    """يولّد خلفية سينمائية عبر Pollinations (مجاني). يرجع None لو فشل."""
+PEXELS_KEY = os.environ.get("PEXELS_API_KEY", "").strip()
+PIXABAY_KEY = os.environ.get("PIXABAY_API_KEY", "").strip()
+_USED = set()
+
+
+def _get_json(url, headers=None):
+    req = urllib.request.Request(url, headers={"User-Agent": "fariz-kanaan-studio/1.0", **(headers or {})})
+    with urllib.request.urlopen(req, timeout=40) as r:
+        import json as _j
+        return _j.loads(r.read().decode())
+
+
+def _download(url, out: Path):
+    req = urllib.request.Request(url, headers={"User-Agent": "fariz-kanaan-studio/1.0"})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        data = r.read()
+    if len(data) > 20000:
+        out.write_bytes(data)
+        return out
+    return None
+
+
+def query_from_prompt(prompt: str) -> str:
+    """كلمات بحث قصيرة من وصف الخلفية (احتياطي إذا لم يُعطَ q)."""
+    import re
+    for t in prompt.lower().split(","):
+        t = re.sub(r"\b(a|an|the|of|in|on|at|with|and|dark|cinematic|dramatic|shot|wide|close|up|view|scene|very|old|warm|light|lit|dimly|no|people)\b", " ", t)
+        words = [w for w in re.findall(r"[a-z]+", t) if len(w) > 2]
+        if len(words) >= 2:
+            return " ".join(words[:4])
+    return ""
+
+
+def _stock_photo(query, w, h, out: Path, seed):
+    """صورة حقيقية مرخّصة مجانًا (Pexels ثم Pixabay)."""
+    orient = "square" if w == h else ("portrait" if h > w else "landscape")
+    cands = []
+    if PEXELS_KEY:
+        try:
+            d = _get_json("https://api.pexels.com/v1/search?" + urllib.parse.urlencode({"query": query, "per_page": 15, "orientation": orient}),
+                          {"Authorization": PEXELS_KEY})
+            cands += [("pexels-%s" % p["id"], p["src"].get("large2x") or p["src"]["original"]) for p in d.get("photos", [])]
+        except Exception as e:  # noqa
+            print(f"  pexels error: {e}", flush=True)
+    if PIXABAY_KEY and len(cands) < 3:
+        try:
+            d = _get_json("https://pixabay.com/api/?" + urllib.parse.urlencode({"key": PIXABAY_KEY, "q": query, "per_page": 20, "image_type": "photo",
+                                                                                   "orientation": "vertical" if h > w else "all", "safesearch": "true"}))
+            cands += [("pixabay-%s" % p["id"], p.get("largeImageURL") or p["webformatURL"]) for p in d.get("hits", [])]
+        except Exception as e:  # noqa
+            print(f"  pixabay error: {e}", flush=True)
+    cands = [c for c in cands if c[0] not in _USED]
+    if not cands:
+        return None
+    pid, url = cands[seed % min(len(cands), 5)]
+    try:
+        if _download(url, out):
+            _USED.add(pid)
+            return out
+    except Exception as e:  # noqa
+        print(f"  stock download error: {e}", flush=True)
+    return None
+
+
+def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None, query: str = None) -> Path:
+    """خلفية الشريحة: صورة حقيقية من Pexels/Pixabay، ثم صورة مولّدة (Pollinations) إن أمكن. يرجع None لو فشل."""
     if out.exists() and out.stat().st_size > 20000:
         return out
     if os.environ.get("FK_NO_NET") == "1":
         return None
     seed = seed if seed is not None else int(hashlib.md5(prompt.encode()).hexdigest()[:6], 16)
+    for q in [query, query_from_prompt(prompt)]:
+        if q:
+            got = _stock_photo(q, w, h, out, seed)
+            if got:
+                return got
     full = f"{prompt}, {BG_STYLE}"
     url = ("https://image.pollinations.ai/prompt/" + urllib.parse.quote(full) +
            f"?width={w}&height={h + 140}&nologo=true&model=flux&seed={seed}")
-    for attempt in range(3):
+    for attempt in range(2):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "fariz-kanaan-studio/1.0"})
-            with urllib.request.urlopen(req, timeout=120) as r:
-                data = r.read()
-            if len(data) > 20000:
-                out.write_bytes(data)
+            if _download(url, out):
                 return out
         except Exception as e:  # noqa
-            print(f"  background attempt {attempt + 1} failed: {e}", flush=True)
-        time.sleep(8 + attempt * 8)
+            print(f"  ai background attempt {attempt + 1} failed: {e}", flush=True)
+            if "402" in str(e):
+                break
+        time.sleep(6)
     return None
 
 

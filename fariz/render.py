@@ -44,12 +44,12 @@ def duration(path):
 
 # ---------------- الخلفيات ----------------
 
-def bg_for(prompt, w, h, cache: Path, seed):
-    if not prompt:
+def bg_for(prompt, w, h, cache: Path, seed, query=None):
+    if not prompt and not query:
         return None
     cache.mkdir(parents=True, exist_ok=True)
     out = cache / f"bg_{w}x{h}_{seed}.jpg"
-    return D.fetch_background(prompt, w, h, out, seed=seed)
+    return D.fetch_background(prompt or query, w, h, out, seed=seed, query=query)
 
 
 # ---------------- الصور الثابتة ----------------
@@ -61,9 +61,9 @@ def render_slides(post, R, out: Path, cache: Path):
     got = []
     for i, sl in enumerate(slides, 1):
         seed = post["post_number"] * 100 + i
-        bg = bg_for(sl.get("bg"), 1080, 1080, cache, seed)
+        bg = bg_for(sl.get("bg"), 1080, 1080, cache, seed, sl.get("q"))
         if not bg and sl.get("bg"):
-            bg = bg_for(sl["bg"].split(",")[0] + ", dark antique scene", 1080, 1080, cache, seed + 50)
+            bg = bg_for(sl["bg"].split(",")[0] + ", dark antique scene", 1080, 1080, cache, seed + 50, post.get("q"))
         if bg:
             got.append(bg)
         elif got:
@@ -138,7 +138,7 @@ def render_reel(post, R, out: Path, cache: Path):
     n = post["post_number"]
     tmp = Path(tempfile.mkdtemp(prefix=f"fk{n}_"))
     # الغلاف
-    cbg = bg_for(reel["cover"].get("bg"), 1080, 1920, cache, n * 100)
+    cbg = bg_for(reel["cover"].get("bg"), 1080, 1920, cache, n * 100, reel["cover"].get("q"))
     R.shot(D.reel_cover(reel["cover"], cbg), out / "cover.jpg", 1080, 1920, jpeg=True)
     log("  cover.jpg")
     frame = tmp / "frame.png"
@@ -156,7 +156,7 @@ def render_reel(post, R, out: Path, cache: Path):
         mp3 = tmp / f"v{k:02d}.mp3"
         tts(sc["voice"], mp3)
         secs = duration(mp3) + 0.45
-        bg = bg_for(sc.get("bg"), 1080, 1920, cache, n * 100 + 10 + k)
+        bg = bg_for(sc.get("bg"), 1080, 1920, cache, n * 100 + 10 + k, sc.get("q"))
         if not bg and cbg:
             bg = cbg
         if not bg:
@@ -172,7 +172,7 @@ def render_reel(post, R, out: Path, cache: Path):
         audios.append(a)
         log(f"  scene {k}/{len(reel['scenes'])} ({secs:.1f}s)")
     # بطاقة الختام
-    ebg = bg_for(reel["cover"].get("bg"), 1080, 1920, cache, n * 100)
+    ebg = cbg
     end_img = tmp / "end.jpg"
     R.shot(D.reel_end(reel, ebg), end_img, 1080, 1920, jpeg=True)
     ce = tmp / "c99.mp4"
