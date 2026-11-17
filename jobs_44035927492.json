@@ -1,0 +1,177 @@
+[
+ {
+  "row_id": null,
+  "post_number": 3,
+  "type": "static",
+  "title": "سوريا على الخريطة: جغرافيا صنعت التاريخ",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg"
+  ],
+  "caption": "لماذا كانت سوريا ممرًّا لكل الحضارات تقريبًا؟\nالجواب يبدأ من الخريطة: ساحلٌ على المتوسط، وجبالٌ تحرس الغرب، وبادية تفتح الطريق شرقًا، ونهر الفرات يربطها بعمق بلاد الرافدين.\nهذه الجغرافيا هي المسرح الذي سنقرأ عليه تاريخ سوريا في هذه السلسلة.\n\n📌 احفظ المنشور وتابع السلسلة.\n\n#سوريا #جغرافيا_سوريا #تاريخ_سوريا #الفرات #بلاد_الشام #Syria #Geography #History #FarizKanaan",
+  "sources": [
+   {
+    "title": "CIA World Factbook — Syria (Geography)",
+    "url": "https://www.cia.gov/the-world-factbook/countries/syria/"
+   },
+   {
+    "title": "Encyclopaedia Britannica — Syria: Land",
+    "url": "https://www.britannica.com/place/Syria/Land"
+   }
+  ],
+  "dir": "POST_003"
+ },
+ {
+  "row_id": null,
+  "post_number": 4,
+  "type": "carousel",
+  "title": "إيبلا: مملكة الألواح الطينية",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg",
+   "slide_02.jpg",
+   "slide_03.jpg",
+   "slide_04.jpg",
+   "slide_05.jpg"
+  ],
+  "caption": "في عام 1975 خرج من تحت تراب تل مرديخ واحدٌ من أهم الأرشيفات في تاريخ الشرق القديم.\nألواح إيبلا (نحو 2400 ق.م) كشفت مملكة سورية منظّمة، تكتب وتدوّن وتتاجر، قبل آلاف السنين.\nوالمفارقة: الحريق الذي دمّر القصر هو نفسه الذي حفظ الألواح.\n\n↔️ اسحب لتقرأ القصة كاملة، وشاركها مع من يحب التاريخ.\n\n#إيبلا #تل_مرديخ #تاريخ_سوريا #حضارات_قديمة #الكتابة_المسمارية #Ebla #AncientSyria #Archaeology #FarizKanaan",
+  "sources": [
+   {
+    "title": "Encyclopaedia Britannica — Ebla",
+    "url": "https://www.britannica.com/place/Ebla"
+   },
+   {
+    "title": "IAA Mar Shiprim — The Archives of Ebla: A Primer",
+    "url": "https://iaassyriology.com/the-archives-of-ebla-a-primer/"
+   },
+   {
+    "title": "Wikipedia — Ebla tablets",
+    "url": "https://en.wikipedia.org/wiki/Ebla_tablets"
+   }
+  ],
+  "dir": "POST_004"
+ },
+ {
+  "row_id": null,
+  "post_number": 5,
+  "render_error": "RuntimeError: TTS failed"
+ },
+ {
+  "row_id": null,
+  "post_number": 6,
+  "type": "static",
+  "title": "دمشق: مدينة لم تتوقف عن الحياة",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg"
+  ],
+  "caption": "قليلة هي المدن التي ظلّت مأهولة كل هذا الزمن.\nدمشق، التي تصفها اليونسكو بأنها من أقدم مدن الشرق الأوسط، تأسست في الألفية الثالثة قبل الميلاد، وكانت عاصمة الدولة الأموية، وما زالت حاراتها القديمة تحمل طبقات من العصور.\n\n💬 ما أول ما يخطر في بالك حين تسمع اسم دمشق؟\n\n#دمشق #الشام #دمشق_القديمة #تاريخ_سوريا #تراث_عالمي #Damascus #OldCity #History #FarizKanaan",
+  "sources": [
+   {
+    "title": "UNESCO World Heritage Centre — Ancient City of Damascus",
+    "url": "https://whc.unesco.org/en/list/20"
+   },
+   {
+    "title": "Encyclopaedia Britannica — Damascus",
+    "url": "https://www.britannica.com/place/Damascus"
+   }
+  ],
+  "dir": "POST_006"
+ },
+ {
+  "row_id": null,
+  "post_number": 7,
+  "type": "carousel",
+  "title": "تدمر: عروس الصحراء",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg",
+   "slide_02.jpg",
+   "slide_03.jpg",
+   "slide_04.jpg",
+   "slide_05.jpg"
+  ],
+  "caption": "واحة في قلب البادية… صارت مدينة تصل الشرق بالمتوسط.\nازدهرت تدمر بتجارة القوافل، وجمعت في فنها بين روما وفارس وتقاليدها المحلية، وتحدّت روما في عهد زنوبيا، ثم عادت جرحًا مفتوحًا حين دُمّرت معالمها عام 2015.\n\n↔️ اسحب للقصة كاملة | 📌 احفظها لتعود إليها.\n\n#تدمر #زنوبيا #تاريخ_سوريا #البادية_السورية #تراث_عالمي #Palmyra #Zenobia #AncientHistory #FarizKanaan",
+  "sources": [
+   {
+    "title": "UNESCO World Heritage Centre — Site of Palmyra",
+    "url": "https://whc.unesco.org/en/list/23"
+   },
+   {
+    "title": "Encyclopaedia Britannica — Palmyra",
+    "url": "https://www.britannica.com/place/Palmyra-Syria"
+   },
+   {
+    "title": "Encyclopaedia Britannica — Zenobia",
+    "url": "https://www.britannica.com/biography/Zenobia"
+   }
+  ],
+  "dir": "POST_007"
+ },
+ {
+  "row_id": null,
+  "post_number": 8,
+  "type": "interactive",
+  "title": "اختبر معلوماتك: التراث العالمي في سوريا",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg"
+  ],
+  "caption": "سؤال اليوم لعشّاق التاريخ 👇\nسوريا تملك ستة مواقع على قائمة التراث العالمي لليونسكو. أيّها أُدرج في القائمة أخيرًا؟\nاكتب الحرف (أ، ب، ج، د) في التعليقات قبل أن تنزل للإجابة.\n.\n.\n.\n✅ الإجابة: (د) القرى الأثرية في شمال سوريا، أُدرجت عام 2011. (بصرى 1980، حلب 1986، قلعة الحصن 2006)\n\n#سوريا #تراث_عالمي #اليونسكو #تاريخ_سوريا #اختبر_معلوماتك #Syria #UNESCO #WorldHeritage #FarizKanaan",
+  "sources": [
+   {
+    "title": "UNESCO World Heritage Centre — Syrian Arab Republic",
+    "url": "https://whc.unesco.org/en/statesparties/sy"
+   },
+   {
+    "title": "UNESCO World Heritage Centre — Ancient Villages of Northern Syria",
+    "url": "https://whc.unesco.org/en/list/1348"
+   }
+  ],
+  "dir": "POST_008"
+ },
+ {
+  "row_id": null,
+  "post_number": 9,
+  "type": "static",
+  "title": "قلعة الحصن: حارسة ممر حمص",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg"
+  ],
+  "caption": "على تلة تشرف على ممر حمص تقف واحدة من أشهر قلاع العصور الوسطى في العالم.\nبناها فرسان الإسبتارية ووسّعوها بين 1142 و1271، حتى استعادها الظاهر بيبرس، وتصفها اليونسكو مع قلعة صلاح الدين بأنهما من أبرز أمثلة العمارة العسكرية في زمن الحروب الصليبية.\n\n📌 احفظ المنشور | 💬 هل زرت قلعة الحصن؟\n\n#قلعة_الحصن #حمص #تاريخ_سوريا #الحروب_الصليبية #بيبرس #KrakDesChevaliers #Castles #History #FarizKanaan",
+  "sources": [
+   {
+    "title": "UNESCO World Heritage Centre — Crac des Chevaliers and Qal'at Salah El-Din",
+    "url": "https://whc.unesco.org/en/list/1229"
+   },
+   {
+    "title": "Encyclopaedia Britannica — Krak des Chevaliers",
+    "url": "https://www.britannica.com/topic/Krak-des-Chevaliers"
+   }
+  ],
+  "dir": "POST_009"
+ },
+ {
+  "row_id": null,
+  "post_number": 10,
+  "type": "static",
+  "title": "الجامع الأموي: طبقات من التاريخ في مكان واحد",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg"
+  ],
+  "caption": "مكانٌ واحد… وأربع طبقات من التاريخ.\nمعبدٌ آرامي، ثم معبد روماني لجوبيتر، ثم كنيسة بيزنطية، ثم الجامع الذي شيّده الخليفة الوليد بن عبد الملك بين عامي 705 و715م، ليصبح من أشهر معالم دمشق والعالم الإسلامي.\n\n💬 أيّ معلم سوري تريد أن نقرأ طبقاته في منشور قادم؟\n\n#الجامع_الأموي #دمشق #الدولة_الأموية #تاريخ_سوريا #عمارة_إسلامية #UmayyadMosque #Damascus #IslamicArchitecture #FarizKanaan",
+  "sources": [
+   {
+    "title": "Encyclopaedia Britannica — Great Mosque of Damascus",
+    "url": "https://www.britannica.com/topic/Great-Mosque-of-Damascus"
+   },
+   {
+    "title": "UNESCO World Heritage Centre — Ancient City of Damascus",
+    "url": "https://whc.unesco.org/en/list/20"
+   }
+  ],
+  "dir": "POST_010"
+ }
+]
