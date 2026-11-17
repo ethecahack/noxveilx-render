@@ -96,17 +96,17 @@ def fetch_background(prompt: str, w: int, h: int, out: Path, seed: int = None) -
     full = f"{prompt}, {BG_STYLE}"
     url = ("https://image.pollinations.ai/prompt/" + urllib.parse.quote(full) +
            f"?width={w}&height={h}&nologo=true&model=flux&seed={seed}")
-    for attempt in range(4):
+    for attempt in range(3):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "fariz-kanaan-studio/1.0"})
-            with urllib.request.urlopen(req, timeout=180) as r:
+            with urllib.request.urlopen(req, timeout=120) as r:
                 data = r.read()
             if len(data) > 20000:
                 out.write_bytes(data)
                 return out
         except Exception as e:  # noqa
             print(f"  background attempt {attempt + 1} failed: {e}", flush=True)
-        time.sleep(6 + attempt * 6)
+        time.sleep(8 + attempt * 8)
     return None
 
 

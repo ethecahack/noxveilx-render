@@ -31,14 +31,15 @@ jobs:
       - name: Decide mode
         run: |
           POSTS="${{ github.event.inputs.posts || '' }}"
-          PUBLISH="${{ github.event.inputs.publish || vars.FARIZ_PUBLISH || '0' }}"
+          AUTO=$(python3 -c "import json;print(1 if json.load(open('fariz/settings.json')).get('publish') else 0)")
+          PUBLISH="${{ github.event.inputs.publish }}"; [ -z "$PUBLISH" ] && PUBLISH=$AUTO
           SKIP=0
           if [ "${{ github.event_name }}" = "push" ]; then
             POSTS=$(grep -oP 'posts=\K[0-9,\-]+' fariz/run-now || true)
             grep -q 'publish=1' fariz/run-now && PUBLISH=1 || PUBLISH=0
           fi
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ vars.FARIZ_PUBLISH }}" != "1" ]; then
-            SKIP=1; echo "Auto-publishing is off (set repo variable FARIZ_PUBLISH=1 after approval)."
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$AUTO" != "1" ]; then
+            SKIP=1; echo "Auto-publishing is off (fariz/settings.json publish=false until the pilot is approved)."
           fi
           echo "FARIZ_POSTS=$POSTS" >> $GITHUB_ENV
           echo "FARIZ_PUBLISH=$PUBLISH" >> $GITHUB_ENV
