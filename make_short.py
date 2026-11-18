@@ -568,9 +568,13 @@ def run_worker(no_upload):
             log(f"تخطّي لغة غير مدعومة: {lang}")
             continue
         for fmt in formats:
-            if fmt not in FORMATS:
-                log(f"تخطّي صيغة غير معروفة: {fmt}")
-                continue
+          if fmt not in FORMATS:
+              log(f"تخطّي صيغة غير معروفة: {fmt}")
+              continue
+          # نركّب كل السيناريوهات الجاهزة مقدّمًا؛ n8n يرفعها لليوتيوب مجدولة على مواعيدها الثابتة
+          for _round in range(int(os.environ.get("MAX_PER_FORMAT", "6"))):
+            if os.environ.get("DRY_RUN") == "1" and _round > 0:
+                break
             try:
                 log(f"===== {lang} / {fmt} =====")
                 sample = HERE / "samples" / f"{fmt}.json"
@@ -580,7 +584,7 @@ def run_worker(no_upload):
                     script = fetch_next(cfg, lang, fmt)
                 if not script:
                     log("لا يوجد سيناريو جاهز لهذه الصيغة الآن.")
-                    continue
+                    break
                 script["lang"] = lang
                 script["format"] = fmt
                 log(f"السيناريو #{script['id']}: {script['title']}")
@@ -605,7 +609,7 @@ def run_worker(no_upload):
                     continue
                 log("الرفع إلى يوتيوب عبر n8n ...")
                 res = upload(cfg, script, final, extra)
-                log(f"تم النشر بنجاح ✅ {res}")
+                log(f"تم الرفع والجدولة ✅ {res}")
                 cleanup(workdir)
             except Exception as e:  # noqa
                 failures += 1

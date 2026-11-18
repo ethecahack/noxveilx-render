@@ -2,8 +2,15 @@ name: NoxveilX - render & publish
 
 on:
   schedule:
-    # 11:00 UTC = 2:00 PM Riyadh (after the short script at 1 PM and the long script at 12:30)
-    - cron: "37 10 * * *"   # 1:37 PM Riyadh; GitHub often starts scheduled runs late, so this lands around 2 PM
+    # Rendering runs ahead of time, several times a day. Publishing time does NOT depend on these runs:
+    # n8n uploads each video to YouTube as a scheduled video (publishAt), and YouTube itself
+    # releases it at the exact slot: shorts daily 2:00 PM Riyadh, long videos Mon/Wed/Fri 2:00 PM Riyadh.
+    - cron: "17 1 * * *"
+    - cron: "43 5 * * *"
+    - cron: "11 9 * * *"
+    - cron: "37 13 * * *"
+    - cron: "7 17 * * *"
+    - cron: "29 21 * * *"
   push:
     # committing a change to .github/run-now starts a run right away.
     # if that file contains the word "dry", the video is rendered but NOT published (kept as an artifact).
@@ -28,7 +35,7 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 170
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v4
 
@@ -60,10 +67,6 @@ jobs:
             if grep -qi "short-only" .github/run-now; then FORMATS=short; fi
           fi
           SKIP=0
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            N=$(gh api "repos/${{ github.repository }}/actions/runs?event=push&created=>=$(date -u +%F)" --jq '[.workflow_runs[] | select(.head_commit.message | test("Publish now"))] | length' || echo 0)
-            if [ "$N" != "0" ]; then SKIP=1; echo "Already published manually today, skipping."; fi
-          fi
           echo "SKIP=$SKIP" >> $GITHUB_ENV
           echo "DRY_RUN=$DRY" >> $GITHUB_ENV
           echo "FORMATS=$FORMATS" >> $GITHUB_ENV
@@ -78,6 +81,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           N8N_BASE_URL: https://farizk16.app.n8n.cloud
           LANGS: en
+          MAX_PER_FORMAT: "3"
           PYTHONUNBUFFERED: "1"
         run: python make_short.py --n8n
 
