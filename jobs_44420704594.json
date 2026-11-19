@@ -1,0 +1,29 @@
+[
+ {
+  "row_id": 3,
+  "post_number": 5,
+  "type": "reel",
+  "title": "أوغاريت: أبجدية من 30 حرفًا",
+  "lang": "ar",
+  "files": [
+   "cover.jpg",
+   "reel.mp4"
+  ],
+  "caption": "عام 1928 كشف محراث فلّاح قبرًا قديمًا قرب اللاذقية… وكانت البداية لاكتشاف أوغاريت.\nفي ألواحها ظهرت أبجدية مسمارية من 30 علامة، كل علامة فيها تمثّل صوتًا، وهي من أقدم الأبجديات المعروفة في العالم (نحو القرن الرابع عشر ق.م).\n\n🎬 شاهد القصة كاملة، واكتب لنا: ما المدينة السورية التي تريد أن نروي قصتها؟\n\n#أوغاريت #رأس_شمرة #الأبجدية #تاريخ_سوريا #اللاذقية #Ugarit #Alphabet #AncientHistory #FarizKanaan",
+  "sources": [
+   {
+    "title": "Encyclopaedia Britannica — Ugarit",
+    "url": "https://www.britannica.com/place/Ugarit"
+   },
+   {
+    "title": "Encyclopaedia Britannica — Ugaritic alphabet",
+    "url": "https://www.britannica.com/topic/Ugaritic-alphabet"
+   },
+   {
+    "title": "Center for Online Judaic Studies — Ugaritic Alphabet Tablet",
+    "url": "https://cojs.org/ugaritic_alphabet_tablet-_14th-13th_century_bce/"
+   }
+  ],
+  "dir": "POST_005"
+ }
+]

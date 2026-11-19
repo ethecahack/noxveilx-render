@@ -1,0 +1,23 @@
+POST 005 [reel] أوغاريت: أبجدية من 30 حرفًا
+  gemini image unavailable, using photos: HTTP Error 429: Too Many Requests {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/do
+  bg: pexels-14786740 (ancient ruins sea)
+  cover.jpg
+  bg: pexels-15070065 (plowed field dusk)
+  scene 1/7 (11.7s)
+  bg: pexels-34060048 (ruins by the sea)
+  scene 2/7 (8.9s)
+  bg: pexels-9258234 (old tools wooden table)
+  scene 3/7 (10.8s)
+  bg: pexels-7479656 (clay texture closeup)
+  scene 4/7 (8.7s)
+  bg: pexels-22798282 (oil lamp dark)
+  scene 5/7 (13.3s)
+  bg: pexels-12859446 (old books magnifying glass)
+  scene 6/7 (7.9s)
+  bg: pexels-35109035 (starry night ruins)
+  scene 7/7 (9.2s)
+  reel.mp4 (75.3s)
+jobs: 1
