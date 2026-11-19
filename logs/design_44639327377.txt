@@ -1,0 +1,8 @@
+POST 006 [static] دمشق: مدينة لم تتوقف عن الحياة
+  gemini image unavailable, using photos: HTTP Error 429: Too Many Requests {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/do
+  bg: pexels-5035866 (old stone arches night)
+  slide 1/1 -> slide_01.jpg
+jobs: 1
