@@ -1,0 +1,33 @@
+[
+ {
+  "row_id": 9,
+  "post_number": 11,
+  "type": "reel",
+  "title": "ماري",
+  "lang": "ar",
+  "files": [
+   "cover.jpg",
+   "reel.mp4"
+  ],
+  "caption": "في قلب بلاد الرافدين، على ضفاف نهر الفرات الخالد، قامت مملكة ماري العريقة، لتصبح منارة للحضارة والتجارة في الشرق القديم. كشفت الحفريات عن قصر زمري ليم الفخم، الذي ضم آلاف الألواح المسمارية، مسجلةً تاريخًا غنيًا يمتد لآلاف السنين. هذه المملكة السورية القديمة تروي لنا قصصًا عن الملوك والتجار والحياة اليومية، وتقدم لنا فهمًا عميقًا لتطور الحضارة في المنطقة.\nما هو الجانب الذي يثير فضولك أكثر في تاريخ مملكة ماري؟\n\n#ماري #تل_الحريري #سوريا_التاريخ #حضارات_قديمة #الفرات #آثار_سورية #بلاد_الرافدين #تاريخ_الشرق_الادنى #AncientSyria #MariKingdom #FarizKanaan",
+  "sources": [
+   {
+    "title": "Mari, an ancient city on the Euphrates",
+    "url": "https://www.worldhistory.org/Mari/"
+   },
+   {
+    "title": "مملكة ماري: لؤلؤة الفرات المنسية",
+    "url": "https://syrianpedia.com/%D9%85%D9%85%D9%84%D9%83%D8%A9-%D9%85%D8%A7%D8%B1%D9%8A/"
+   },
+   {
+    "title": "قصر ماري الملكي",
+    "url": "https://ar.wikipedia.org/wiki/%D9%82%D8%B5%D8%B1_%D9%85%D8%A7%D8%B1%D9%8A_%D8%A7%D9%84%D9%85%D9%84%D9%83%D9%8A"
+   },
+   {
+    "title": "Mari, a new city founded on the right bank of the Euphrates",
+    "url": "https://www.culture.gouv.fr/en/Thematic-dossiers/Archeology/Great-discoveries/Mari"
+   }
+  ],
+  "dir": "POST_011"
+ }
+]

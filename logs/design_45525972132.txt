@@ -1,0 +1,23 @@
+POST 011 [reel] ماري
+  gemini image unavailable, using photos: HTTP Error 429: Too Many Requests {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/do
+  bg: pexels-38306185 (ancient riverbank dawn)
+  cover.jpg
+  bg: pexels-34403524 (euphrates river sunset)
+  scene 1/7 (10.2s)
+  bg: pexels-8136587 (ancient trade routes converging)
+  scene 2/7 (10.7s)
+  bg: pexels-27901650 (interior grand ancient palace)
+  scene 3/7 (11.2s)
+  bg: pexels-31734018 (ancient cuneiform tablets neatly)
+  scene 4/7 (11.6s)
+  bg: pexels-5955738 (abstract ancient writing tools)
+  scene 5/7 (10.5s)
+  bg: pexels-18835693 (ancient city walls partially)
+  scene 6/7 (9.9s)
+  bg: pexels-11475762 (archaeological excavation site sunset)
+  scene 7/7 (9.4s)
+  reel.mp4 (78.3s)
+jobs: 1
