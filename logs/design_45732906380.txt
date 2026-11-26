@@ -1,0 +1,18 @@
+POST 012 [carousel] حلب وقلعتها
+  gemini image unavailable, using photos: HTTP Error 429: Too Many Requests {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/do
+  bg: pexels-33536486 (ancient city dark)
+  slide 1/6 -> slide_01.jpg
+  bg: pexels-33852042 (archaeological site night)
+  slide 2/6 -> slide_02.jpg
+  bg: pexels-38240978 (ancient stone wall)
+  slide 3/6 -> slide_03.jpg
+  bg: pexels-32150044 (parchment ancient script)
+  slide 4/6 -> slide_04.jpg
+  bg: pexels-33773216 (unesco emblem stone)
+  slide 5/6 -> slide_05.jpg
+  bg: pexels-3109821 (abstract historical dark)
+  slide 6/6 -> slide_06.jpg
+jobs: 1

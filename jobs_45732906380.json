@@ -1,0 +1,37 @@
+[
+ {
+  "row_id": 10,
+  "post_number": 12,
+  "type": "carousel",
+  "title": "حلب وقلعتها",
+  "lang": "ar",
+  "files": [
+   "slide_01.jpg",
+   "slide_02.jpg",
+   "slide_03.jpg",
+   "slide_04.jpg",
+   "slide_05.jpg",
+   "slide_06.jpg"
+  ],
+  "caption": "تُعدّ حلب، بقلعتها الشامخة وتاريخها العريق، واحدة من أقدم المدن المأهولة باستمرار في العالم، وشاهدة على تعاقب الحضارات منذ آلاف السنين.\n\nمنذ الألفية السادسة قبل الميلاد، احتضنت هذه المدينة العظيمة شعوباً وحضارات تركت بصماتها الخالدة، من الحيثيين والإغريق إلى الأيوبيين والعثمانيين، لتشكل نسيجاً ثقافياً ومعمارياً فريداً.\n\nقلعتها التي تقف كحارس أمين، ليست مجرد بناء، بل هي سجل حي لقرون من الصمود والابتكار.\n\nما هي الحضارة التي تركت أثراً في حلب تود معرفة المزيد عنها؟ 🤔\n\n#حلب #قلعة_حلب #سوريا #تراث_عالمي #تاريخ_عريق #مدن_قديمة #اليونسكو #Aleppo #AleppoCitadel #Syria #WorldHeritage #AncientCities #History #UNESCO #FarizKanaan",
+  "sources": [
+   {
+    "title": "Aleppo, Syria",
+    "url": "https://www.britannica.com/place/Aleppo"
+   },
+   {
+    "title": "Ancient City of Aleppo",
+    "url": "https://whc.unesco.org/en/list/21/"
+   },
+   {
+    "title": "حلب الشهباء.. إحدى أقدم المدن المأهولة في التاريخ",
+    "url": "https://www.aljazeera.net/encyclopedia/citiesandregions/2020/6/28/%D8%AD%D9%84%D8%A8-%D8%A7%D9%84%D8%B4%D9%87%D8%A8%D8%A7%D8%A1-%D8%A5%D9%88%D8%AD%D8%AF%D9%89-%D8%A3%D9%82%D9%85-%D8%A7%D9%84%D9%85%D8%AF%D9%86-%D8%A7%D9%84%D9%85%D8%A3%D9%87%D9%88%D9%84%D8%A9"
+   },
+   {
+    "title": "The Citadel of Aleppo",
+    "url": "https://www.wmf.org/project/citadel-aleppo/"
+   }
+  ],
+  "dir": "POST_012"
+ }
+]
